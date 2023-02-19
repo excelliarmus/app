@@ -14,7 +14,7 @@ The goal of this repo is to provide a monitoring of the project progress, by set
 ### List of features to implement sorted by order of importance:
 
 - [X] Create basic UserForm / mock programs
-- [ ] Button to show current BTC's price (HTTP request to Binance's API)
+- [X] Button to show current BTC's price (HTTP request to Binance's API)
 - [ ] Download historical data (https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h)
 - [ ] Display financial data as a chart
 - [ ] Make repeted requests and make chart update dynamically
