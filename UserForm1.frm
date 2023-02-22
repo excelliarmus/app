@@ -14,6 +14,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
+
 Sub btnData_Click()
 
  'frmData.Visible = False
@@ -41,6 +42,44 @@ End Sub
 
 
 
+
+Private Sub btnDataGetChart_Click()
+
+nRows = Sheets("Data").UsedRange.Rows.Count
+ 
+Dim OHLCChart As Chart
+Set OHLCChart = Charts.Add
+ 
+With OHLCChart
+    .SetSourceData Source:=Sheets("Data").Range("a1:e" & nRows)
+    .ChartType = xlStockOHLC
+    With .ChartGroups(1)
+     
+        .UpBars.Interior.ColorIndex = 10
+        .DownBars.Interior.ColorIndex = 3
+    End With
+    .PlotArea.Format.Fill.ForeColor.RGB = RGB(4, 4, 65)
+    .ChartArea.Interior.Color = RGB(4, 4, 65)
+    .HasLegend = False
+    .Axes(xlValue, xlPrimary).TickLabels.Font.Color = RGB(255, 255, 255)
+    .Axes(xlValue, xlPrimary).TickLabels.Font.Size = 20
+    '.Axes(xlCategory, xlPrimary).TickLabels.Font.Color = RGB(255, 255, 255)
+    .HasAxis(xlCategory) = False
+End With
+
+
+
+ActiveChart.Export ThisWorkbook.Path & "\chart.jpg"
+f = ActiveSheet.Name
+Sheets(f).Select
+ActiveWindow.SelectedSheets.Visible = False
+
+
+fname = ThisWorkbook.Path & "\chart.jpg"
+
+UserForm1.imgData1.Picture = LoadPicture(fname)
+
+End Sub
 
 Sub btnTrading_Click()
 
@@ -90,26 +129,17 @@ End Sub
 
 Sub btnExit_Click()
 
+MsgBox "Click on 'Delete' for all the next prompts"
+
+Call ModDeleteAllCharts.deleteAll
+
 Unload Me
 
 End Sub
 
-Private Sub frmBalances_Click()
 
-End Sub
+Sub UserForm_Activate()
 
-Private Sub frmTrading_Click()
-
-End Sub
-
-Private Sub Label3_Click()
-
-End Sub
-
-Private Sub Label4_Click()
-
-End Sub
-
-Private Sub Label5_Click()
+Call ModMakeUserFormResizable.MakeFormResizable
 
 End Sub
