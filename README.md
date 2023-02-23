@@ -15,9 +15,9 @@ The goal of this repo is to provide a monitoring of the project progress, by set
 
 - [X] Create basic UserForm / mock programs
 - [X] Button to show current BTC's price (HTTP request to Binance's API)
-- [ ] Download historical data (https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h)
-- [ ] Display financial data as a chart
-- [ ] Make repeted requests and make chart update dynamically
+- [X] Download historical data (https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h)
+- [X] Display financial data as a chart
+- [X] Make repeted requests and make chart update dynamically
 - [ ] Connect to Binance's subnet (Paper)
 - [ ] Display Binance's Paper accounts
 - [ ] Take random positions at random moments and update balances
