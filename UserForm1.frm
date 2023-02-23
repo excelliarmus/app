@@ -15,6 +15,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 
+
+
 Sub btnData_Click()
 
  'frmData.Visible = False
@@ -38,47 +40,20 @@ Sub btnBalances_Click()
  frmBalances.Visible = True
 
 End Sub
-
-
-
-
-
 Private Sub btnDataGetChart_Click()
+    Call ModData.activateDataStream1
+    Do Until Not ModData.get_isDataStream1On
+        Call ModData.writeData1(UserForm1.inputData1)
+        Call ModData.displayData1
+        Application.Wait (Now + TimeValue("00:00:02"))
+        DoEvents
+    Loop
 
-nRows = Sheets("Data").UsedRange.Rows.Count
- 
-Dim OHLCChart As Chart
-Set OHLCChart = Charts.Add
- 
-With OHLCChart
-    .SetSourceData Source:=Sheets("Data").Range("a1:e" & nRows)
-    .ChartType = xlStockOHLC
-    With .ChartGroups(1)
-     
-        .UpBars.Interior.ColorIndex = 10
-        .DownBars.Interior.ColorIndex = 3
-    End With
-    .PlotArea.Format.Fill.ForeColor.RGB = RGB(4, 4, 65)
-    .ChartArea.Interior.Color = RGB(4, 4, 65)
-    .HasLegend = False
-    .Axes(xlValue, xlPrimary).TickLabels.Font.Color = RGB(255, 255, 255)
-    .Axes(xlValue, xlPrimary).TickLabels.Font.Size = 20
-    '.Axes(xlCategory, xlPrimary).TickLabels.Font.Color = RGB(255, 255, 255)
-    .HasAxis(xlCategory) = False
-End With
+    
+End Sub
 
-
-
-ActiveChart.Export ThisWorkbook.Path & "\chart.jpg"
-f = ActiveSheet.Name
-Sheets(f).Select
-ActiveWindow.SelectedSheets.Visible = False
-
-
-fname = ThisWorkbook.Path & "\chart.jpg"
-
-UserForm1.imgData1.Picture = LoadPicture(fname)
-
+Private Sub btnStopData1_Click()
+    Call ModData.desactivateDataStream1
 End Sub
 
 Sub btnTrading_Click()
@@ -137,6 +112,14 @@ Unload Me
 
 End Sub
 
+
+Private Sub TextBox1_Change()
+
+End Sub
+
+Private Sub frmAbout_Click()
+
+End Sub
 
 Sub UserForm_Activate()
 
