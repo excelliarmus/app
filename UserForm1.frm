@@ -40,7 +40,7 @@ Sub btnBalances_Click()
  frmBalances.Visible = True
 
 End Sub
-Private Sub btnDataGetChart_Click()
+Private Sub btnStartData1_Click()
     Call ModData.activateDataStream1
     Do Until Not ModData.get_isDataStream1On
         Call ModData.writeData1(UserForm1.inputData1)
@@ -52,8 +52,23 @@ Private Sub btnDataGetChart_Click()
     
 End Sub
 
+Private Sub btnStartData2_Click()
+    Call ModData.activateDataStream2
+    Do Until Not ModData.get_isDataStream2On
+        Call ModData.displayData2(UserForm1.inputData2)
+        Application.Wait (Now + TimeValue("00:00:01"))
+        DoEvents
+    Loop
+End Sub
+
+
 Private Sub btnStopData1_Click()
     Call ModData.desactivateDataStream1
+End Sub
+
+Private Sub btnStopData2_Click()
+    Call ModData.desactivateDataStream2
+
 End Sub
 
 Sub btnTrading_Click()
@@ -114,6 +129,10 @@ End Sub
 
 
 Private Sub TextBox1_Change()
+
+End Sub
+
+Private Sub CommandButton3_Click()
 
 End Sub
 

@@ -1,6 +1,17 @@
 Attribute VB_Name = "ModData"
 Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 Public isDataStream1On As Boolean
+Public isDataStream2On As Boolean
+Public chart2array() As Double
+Public canIncrementData2 As Boolean
+
+
+
+
+
+
+
+
 
 Sub writeData1(ticker As String)
 
@@ -130,11 +141,117 @@ End Sub
 Function get_isDataStream1On()
     get_isDataStream1On = isDataStream1On
 End Function
+Function get_isDataStream2On()
+    get_isDataStream2On = isDataStream2On
+End Function
 
 Sub activateDataStream1()
     isDataStream1On = True
 End Sub
 
+Sub activateDataStream2()
+    isDataStream2On = True
+End Sub
+
 Sub desactivateDataStream1()
     isDataStream1On = False
 End Sub
+
+Sub desactivateDataStream2()
+    isDataStream2On = False
+End Sub
+
+
+Sub displayData2(ticker As String)
+
+
+Dim mychart As Chart
+
+
+Set mychart = Charts.Add
+
+Call incrementChart2Array(ticker)
+
+With mychart
+    .SeriesCollection.NewSeries
+    .SeriesCollection(1).XValues = chart2array
+    .SeriesCollection(1).Values = chart2array
+    .SeriesCollection(1).Format.Line.ForeColor.RGB = RGB(255, 255, 255)
+    .ChartType = xlLine
+    .HasAxis(xlCategory) = False
+    .HasLegend = False
+    .PlotArea.Format.Fill.ForeColor.RGB = RGB(4, 4, 65)
+    .ChartArea.Interior.Color = RGB(4, 4, 65)
+    .Axes(xlValue, xlPrimary).TickLabels.Font.Color = RGB(255, 255, 255)
+    .Axes(xlValue, xlPrimary).TickLabels.Font.Size = 20
+    .SeriesCollection(1).MarkerSize = 30
+    .SeriesCollection(1).MarkerBackgroundColor = RGB(255, 255, 255)
+    .SeriesCollection(1).MarkerForegroundColor = RGB(255, 255, 255)
+End With
+
+
+
+
+ActiveChart.Export ThisWorkbook.Path & "\chart2.jpg"
+f = ActiveSheet.Name
+Sheets(f).Select
+ActiveWindow.SelectedSheets.Visible = False
+
+
+fname = ThisWorkbook.Path & "\chart2.jpg"
+
+UserForm1.imgData2.Picture = LoadPicture(fname)
+End Sub
+
+Sub incrementChart2Array(ticker As String)
+
+Dim len_arr As Integer
+
+
+If Not canIncrementData2 Then
+    ReDim Preserve chart2array(0)
+    chart2array(UBound(chart2array)) = getCurrentPrice(ticker)
+    canIncrementData2 = True
+Else
+    len_arr = UBound(chart2array) - LBound(chart2array) + 1
+    If len_arr = 30 Then
+    For i = 0 To len_arr - 2
+    chart2array(i) = chart2array(i + 1)
+    Next
+    chart2array(UBound(chart2array)) = getCurrentPrice(ticker)
+    Else
+    ReDim Preserve chart2array(0 To UBound(chart2array) + 1)
+    chart2array(UBound(chart2array)) = getCurrentPrice(ticker)
+    End If
+
+End If
+
+
+
+End Sub
+
+
+Function getCurrentPrice(symbol As String) As Double
+
+Dim xmlhttp As Object
+Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+Dim json As Object
+Dim newPrice As Double
+
+On Error GoTo noticker
+
+Url = "https://api.binance.com/api/v3/ticker/price?symbol=" & symbol
+xmlhttp.Open "GET", Url, False
+xmlhttp.Send
+
+Set json = JsonConverter.ParseJson(xmlhttp.responseText)
+getCurrentPrice = CDbl(Replace(json("price"), ".", ","))
+
+Done:  Exit Function
+
+noticker:
+    MsgBox "This trading pair '" & symbol & "' is not supported on Binance."
+
+
+
+End Function
