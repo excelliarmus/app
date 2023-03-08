@@ -1,0 +1,265 @@
+Attribute VB_Name = "ModBinanceRequests"
+Function getSignature(toHash As String, secretKey As String)
+
+getSignature = Hex_HMACSHA256(toHash, secretKey)
+
+End Function
+
+
+Public Function Hex_HMACSHA256(ByVal sTextToHash As String, ByVal sSharedSecretKey As String)
+
+    Dim asc As Object, enc As Object
+    Dim TextToHash() As Byte
+    Dim SharedSecretKey() As Byte
+    Set asc = CreateObject("System.Text.UTF8Encoding")
+    Set enc = CreateObject("System.Security.Cryptography.HMACSHA256")
+
+    TextToHash = asc.Getbytes_4(sTextToHash)
+    SharedSecretKey = asc.Getbytes_4(sSharedSecretKey)
+    enc.Key = SharedSecretKey
+
+    Dim bytes() As Byte
+    bytes = enc.ComputeHash_2((TextToHash))
+    Hex_HMACSHA256 = LCase(Base64To16(EncodeBase64(bytes)))
+    Set asc = Nothing
+    Set enc = Nothing
+
+End Function
+
+Private Function EncodeBase64(ByRef arrData() As Byte) As String
+
+    'Inside the VBE, Go to Tools -> References, then Select Microsoft XML, v6.0
+    '(or whatever your latest is. This will give you access to the XML Object Library.)
+
+    Dim objXML As MSXML2.DOMDocument60
+    Dim objNode As MSXML2.IXMLDOMElement
+
+    Set objXML = New MSXML2.DOMDocument60
+
+    ' byte array to base64
+    Set objNode = objXML.createElement("b64")
+    objNode.DataType = "bin.base64"
+    objNode.nodeTypedValue = arrData
+    EncodeBase64 = objNode.Text
+
+    Set objNode = Nothing
+    Set objXML = Nothing
+End Function
+
+Private Function ByteArrayToHex(ByRef ByteArray() As Byte) As String
+    Dim l As Long, strRet As String
+    
+    For l = LBound(ByteArray) To UBound(ByteArray)
+        strRet = strRet & Hex$(ByteArray(l)) & ""
+    Next l
+
+    ByteArrayToHex = LCase(strRet)
+End Function
+
+Function getTimeStampForBinance()
+    Dim timestamp_string As String
+    Dim timestamp_vba As LongLong
+    Dim timestamp_real As LongLong
+    Dim timestamp_binance As LongLong
+    
+    timestamp_string = Split((DateDiff("s", "01/01/1970", Date) + Timer) * 1000, ",")(0)
+    timestamp_vba = CLngLng(timestamp_string)
+    ' VBA's ts is 3594104 ahead
+    timestamp_real = timestamp_vba - 3594104
+    timestamp_binance = timestamp_real - 50000
+    
+    getTimeStampForBinance = timestamp_binance
+
+End Function
+
+Function Base64To16(Base64 As String) As String
+  Dim Base2 As String
+  Dim i As Long
+  If Len(Base64) Mod 4 > 0 Then
+    Base64To16 = CVErr(xlErrValue)
+    Exit Function
+  End If
+  For i = 1 To Len(Base64)
+    Select Case Mid(Base64, i, 1)
+      Case "A"
+        Base2 = Base2 & "000000"
+      Case "B"
+        Base2 = Base2 & "000001"
+      Case "C"
+        Base2 = Base2 & "000010"
+      Case "D"
+        Base2 = Base2 & "000011"
+      Case "E"
+        Base2 = Base2 & "000100"
+      Case "F"
+        Base2 = Base2 & "000101"
+      Case "G"
+        Base2 = Base2 & "000110"
+      Case "H"
+        Base2 = Base2 & "000111"
+      Case "I"
+        Base2 = Base2 & "001000"
+      Case "J"
+        Base2 = Base2 & "001001"
+      Case "K"
+        Base2 = Base2 & "001010"
+      Case "L"
+        Base2 = Base2 & "001011"
+      Case "M"
+        Base2 = Base2 & "001100"
+      Case "N"
+        Base2 = Base2 & "001101"
+      Case "O"
+        Base2 = Base2 & "001110"
+      Case "P"
+        Base2 = Base2 & "001111"
+      Case "Q"
+        Base2 = Base2 & "010000"
+      Case "R"
+        Base2 = Base2 & "010001"
+      Case "S"
+        Base2 = Base2 & "010010"
+      Case "T"
+        Base2 = Base2 & "010011"
+      Case "U"
+        Base2 = Base2 & "010100"
+      Case "V"
+        Base2 = Base2 & "010101"
+      Case "W"
+        Base2 = Base2 & "010110"
+      Case "X"
+        Base2 = Base2 & "010111"
+      Case "Y"
+        Base2 = Base2 & "011000"
+      Case "Z"
+        Base2 = Base2 & "011001"
+      Case "a"
+        Base2 = Base2 & "011010"
+      Case "b"
+        Base2 = Base2 & "011011"
+      Case "c"
+        Base2 = Base2 & "011100"
+      Case "d"
+        Base2 = Base2 & "011101"
+      Case "e"
+        Base2 = Base2 & "011110"
+      Case "f"
+        Base2 = Base2 & "011111"
+      Case "g"
+        Base2 = Base2 & "100000"
+      Case "h"
+        Base2 = Base2 & "100001"
+      Case "i"
+        Base2 = Base2 & "100010"
+      Case "j"
+        Base2 = Base2 & "100011"
+      Case "k"
+        Base2 = Base2 & "100100"
+      Case "l"
+        Base2 = Base2 & "100101"
+      Case "m"
+        Base2 = Base2 & "100110"
+      Case "n"
+        Base2 = Base2 & "100111"
+      Case "o"
+        Base2 = Base2 & "101000"
+      Case "p"
+        Base2 = Base2 & "101001"
+      Case "q"
+        Base2 = Base2 & "101010"
+      Case "r"
+        Base2 = Base2 & "101011"
+      Case "s"
+        Base2 = Base2 & "101100"
+      Case "t"
+        Base2 = Base2 & "101101"
+      Case "u"
+        Base2 = Base2 & "101110"
+      Case "v"
+        Base2 = Base2 & "101111"
+      Case "w"
+        Base2 = Base2 & "110000"
+      Case "x"
+        Base2 = Base2 & "110001"
+      Case "y"
+        Base2 = Base2 & "110010"
+      Case "z"
+        Base2 = Base2 & "110011"
+      Case "0"
+        Base2 = Base2 & "110100"
+      Case "1"
+        Base2 = Base2 & "110101"
+      Case "2"
+        Base2 = Base2 & "110110"
+      Case "3"
+        Base2 = Base2 & "110111"
+      Case "4"
+        Base2 = Base2 & "111000"
+      Case "5"
+        Base2 = Base2 & "111001"
+      Case "6"
+        Base2 = Base2 & "111010"
+      Case "7"
+        Base2 = Base2 & "111011"
+      Case "8"
+        Base2 = Base2 & "111100"
+      Case "9"
+        Base2 = Base2 & "111101"
+      Case "+"
+        Base2 = Base2 & "111110"
+      Case "/"
+        Base2 = Base2 & "111111"
+      Case "="
+        Base2 = Left(Base2, Len(Base2) - 2)
+      Case Else
+        Base64To16 = CVErr(xlErrValue)
+        Exit Function
+    End Select
+  Next i
+  If Not Len(Base2) Mod 4 = 0 Then
+    Base2 = String(4 - (Len(Base2) Mod 4), "0") & Base2
+  End If
+  If Len(Base2) > 4 And Left(Base2, 4) = "0000" Then
+    Base2 = Mid(Base2, 5)
+  End If
+  Base64To16 = ""
+  For i = 1 To Len(Base2) Step 4
+    Select Case Mid(Base2, i, 4)
+      Case "0000"
+        Base64To16 = Base64To16 & "0"
+      Case "0001"
+        Base64To16 = Base64To16 & "1"
+      Case "0010"
+        Base64To16 = Base64To16 & "2"
+      Case "0011"
+        Base64To16 = Base64To16 & "3"
+      Case "0100"
+        Base64To16 = Base64To16 & "4"
+      Case "0101"
+        Base64To16 = Base64To16 & "5"
+      Case "0110"
+        Base64To16 = Base64To16 & "6"
+      Case "0111"
+        Base64To16 = Base64To16 & "7"
+      Case "1000"
+        Base64To16 = Base64To16 & "8"
+      Case "1001"
+        Base64To16 = Base64To16 & "9"
+      Case "1010"
+        Base64To16 = Base64To16 & "A"
+      Case "1011"
+        Base64To16 = Base64To16 & "B"
+      Case "1100"
+        Base64To16 = Base64To16 & "C"
+      Case "1101"
+        Base64To16 = Base64To16 & "D"
+      Case "1110"
+        Base64To16 = Base64To16 & "E"
+      Case "1111"
+        Base64To16 = Base64To16 & "F"
+    End Select
+  Next i
+  If Len(Base64To16) Mod 2 = 1 Then
+    Base64To16 = "0" & Base64To16
+  End If
+End Function

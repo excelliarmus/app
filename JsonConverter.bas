@@ -764,7 +764,7 @@ Private Function json_StringIsLargeNumber(json_String As Variant) As Boolean
         json_StringIsLargeNumber = True
 
         For json_CharIndex = 1 To json_Length
-            json_CharCode = VBA.Asc(VBA.Mid$(json_String, json_CharIndex, 1))
+            json_CharCode = VBA.asc(VBA.Mid$(json_String, json_CharIndex, 1))
             Select Case json_CharCode
             ' Look for .|0-9|E|e
             Case 46, 48 To 57, 69, 101

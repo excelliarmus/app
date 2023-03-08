@@ -47,7 +47,9 @@ Set json = JsonConverter.ParseJson(xmlhttp.responseText)
 '    "1756.87402397",    // Taker buy base asset volume (10)
 '    "28.46694368",      // Taker buy quote asset volume (11)
 '    "0"                 // Unused field, ignore. (12)
-'  ]
+'  ],
+'  ...
+'  [...]
 ']
 
 ' Debug.Print json(100)(12)

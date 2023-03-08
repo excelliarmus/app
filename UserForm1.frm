@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1 
    Caption         =   "UserForm1"
-   ClientHeight    =   12600
+   ClientHeight    =   11025
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   22305
+   ClientWidth     =   15750
    OleObjectBlob   =   "UserForm1.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -16,6 +16,45 @@ Attribute VB_Exposed = False
 
 
 
+
+Private Sub btnBalances1_Click()
+
+Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
+
+
+End Sub
+
+Private Sub btnBalancesUpdateBNB_Click()
+Call ModBalances.UpdateBNB(UserForm1.inputBalances1, UserForm1.inputBalances2)
+End Sub
+
+Private Sub btnBalancesUpdateBTC_Click()
+Call ModBalances.UpdateBTC(UserForm1.inputBalances1, UserForm1.inputBalances2)
+End Sub
+
+Private Sub btnBalancesUpdateBUSD_Click()
+Call ModBalances.UpdateBUSD(UserForm1.inputBalances1, UserForm1.inputBalances2)
+End Sub
+
+Private Sub btnBalancesUpdateETH_Click()
+Call ModBalances.UpdateETH(UserForm1.inputBalances1, UserForm1.inputBalances2)
+End Sub
+
+Private Sub btnBalancesUpdateLTC_Click()
+Call ModBalances.UpdateLTC(UserForm1.inputBalances1, UserForm1.inputBalances2)
+End Sub
+
+Private Sub btnBalancesUpdateTRX_Click()
+Call ModBalances.UpdateTRX(UserForm1.inputBalances1, UserForm1.inputBalances2)
+End Sub
+
+Private Sub btnBalancesUpdateUSDT_Click()
+Call ModBalances.UpdateUSDT(UserForm1.inputBalances1, UserForm1.inputBalances2)
+End Sub
+
+Private Sub btnBalancesUpdateXRP_Click()
+Call ModBalances.UpdateXRP(UserForm1.inputBalances1, UserForm1.inputBalances2)
+End Sub
 
 Sub btnData_Click()
 
@@ -136,7 +175,25 @@ Private Sub CommandButton3_Click()
 
 End Sub
 
+Private Sub CommandButton1_Click()
+
+End Sub
+
+Private Sub btnTrading1_Click()
+
+Call ModTrading.buyBTCUSDT(UserForm1.inputBalances1, UserForm1.inputBalances2)
+
+End Sub
+
 Private Sub frmAbout_Click()
+
+End Sub
+
+Private Sub Label10_Click()
+
+End Sub
+
+Private Sub Label6_Click()
 
 End Sub
 
