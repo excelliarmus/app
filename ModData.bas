@@ -6,6 +6,14 @@ Public chart2array() As Double
 Public canIncrementData2 As Boolean
 
 
+Sub initializeData(ticker1 As String, ticker2 As String)
+    writeData1 (ticker1)
+    displayData1
+    displayData2 (ticker2)
+    displayBidAsk1 (ticker1)
+    displayBidAsk2 (ticker2)
+    
+End Sub
 
 
 
@@ -96,6 +104,7 @@ Next
 Done:  Exit Sub
 
 noticker:
+    isDataStream1On = False
     MsgBox "This trading pair '" & ticker & "' is not supported on Binance."
 
 
@@ -117,8 +126,8 @@ With OHLCChart
         .UpBars.Interior.ColorIndex = 10
         .DownBars.Interior.ColorIndex = 3
     End With
-    .PlotArea.Format.Fill.ForeColor.RGB = RGB(4, 4, 65)
-    .ChartArea.Interior.Color = RGB(4, 4, 65)
+    .PlotArea.Format.Fill.ForeColor.RGB = RGB(34, 34, 34)
+    .ChartArea.Interior.Color = RGB(34, 34, 34)
     .HasLegend = False
     .Axes(xlValue, xlPrimary).TickLabels.Font.Color = RGB(255, 255, 255)
     .Axes(xlValue, xlPrimary).TickLabels.Font.Size = 20
@@ -182,8 +191,8 @@ With mychart
     .ChartType = xlLine
     .HasAxis(xlCategory) = False
     .HasLegend = False
-    .PlotArea.Format.Fill.ForeColor.RGB = RGB(4, 4, 65)
-    .ChartArea.Interior.Color = RGB(4, 4, 65)
+    .PlotArea.Format.Fill.ForeColor.RGB = RGB(34, 34, 34)
+    .ChartArea.Interior.Color = RGB(34, 34, 34)
     .Axes(xlValue, xlPrimary).TickLabels.Font.Color = RGB(255, 255, 255)
     .Axes(xlValue, xlPrimary).TickLabels.Font.Size = 20
     .SeriesCollection(1).MarkerSize = 30
@@ -252,8 +261,112 @@ getCurrentPrice = CDbl(Replace(json("price"), ".", ","))
 Done:  Exit Function
 
 noticker:
+    isDataStream2On = False
     MsgBox "This trading pair '" & symbol & "' is not supported on Binance."
 
 
 
 End Function
+
+
+Sub displayBidAsk1(symbol As String)
+Dim xmlhttp As Object
+Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+Dim json As Object
+
+
+On Error GoTo noticker
+
+Url = "https://api.binance.com/api/v3/depth?limit=13&symbol=" & symbol
+xmlhttp.Open "GET", Url, False
+xmlhttp.Send
+
+
+Set json = JsonConverter.ParseJson(xmlhttp.responseText)
+
+UserForm1.lblDataAsk1.Caption = json("asks")(1)(1)
+UserForm1.lblDataAsk2.Caption = json("asks")(2)(1)
+UserForm1.lblDataAsk3.Caption = json("asks")(3)(1)
+UserForm1.lblDataAsk4.Caption = json("asks")(4)(1)
+UserForm1.lblDataAsk5.Caption = json("asks")(5)(1)
+UserForm1.lblDataAsk6.Caption = json("asks")(6)(1)
+UserForm1.lblDataAsk7.Caption = json("asks")(7)(1)
+UserForm1.lblDataAsk8.Caption = json("asks")(8)(1)
+UserForm1.lblDataAsk9.Caption = json("asks")(9)(1)
+UserForm1.lblDataAsk10.Caption = json("asks")(10)(1)
+UserForm1.lblDataAsk11.Caption = json("asks")(11)(1)
+UserForm1.lblDataAsk12.Caption = json("asks")(12)(1)
+UserForm1.lblDataAsk13.Caption = json("asks")(13)(1)
+
+UserForm1.lblDataBid1.Caption = json("bids")(1)(1)
+UserForm1.lblDataBid2.Caption = json("bids")(2)(1)
+UserForm1.lblDataBid3.Caption = json("bids")(3)(1)
+UserForm1.lblDataBid4.Caption = json("bids")(4)(1)
+UserForm1.lblDataBid5.Caption = json("bids")(5)(1)
+UserForm1.lblDataBid6.Caption = json("bids")(6)(1)
+UserForm1.lblDataBid7.Caption = json("bids")(7)(1)
+UserForm1.lblDataBid8.Caption = json("bids")(8)(1)
+UserForm1.lblDataBid9.Caption = json("bids")(9)(1)
+UserForm1.lblDataBid10.Caption = json("bids")(10)(1)
+UserForm1.lblDataBid11.Caption = json("bids")(11)(1)
+UserForm1.lblDataBid12.Caption = json("bids")(12)(1)
+UserForm1.lblDataBid13.Caption = json("bids")(13)(1)
+
+
+Done:  Exit Sub
+
+noticker:
+    MsgBox "This trading pair '" & symbol & "' is not supported on Binance."
+
+End Sub
+
+Sub displayBidAsk2(symbol As String)
+Dim xmlhttp As Object
+Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+Dim json As Object
+
+
+On Error GoTo noticker
+
+Url = "https://api.binance.com/api/v3/depth?limit=13&symbol=" & symbol
+xmlhttp.Open "GET", Url, False
+xmlhttp.Send
+
+
+Set json = JsonConverter.ParseJson(xmlhttp.responseText)
+
+UserForm1.lblData2Ask1.Caption = json("asks")(1)(1)
+UserForm1.lblData2Ask2.Caption = json("asks")(2)(1)
+UserForm1.lblData2Ask3.Caption = json("asks")(3)(1)
+UserForm1.lblData2Ask4.Caption = json("asks")(4)(1)
+UserForm1.lblData2Ask5.Caption = json("asks")(5)(1)
+UserForm1.lblData2Ask6.Caption = json("asks")(6)(1)
+UserForm1.lblData2Ask7.Caption = json("asks")(7)(1)
+UserForm1.lblData2Ask8.Caption = json("asks")(8)(1)
+UserForm1.lblData2Ask9.Caption = json("asks")(9)(1)
+UserForm1.lblData2Ask10.Caption = json("asks")(10)(1)
+UserForm1.lblData2Ask11.Caption = json("asks")(11)(1)
+UserForm1.lblData2Ask12.Caption = json("asks")(12)(1)
+UserForm1.lblData2Ask13.Caption = json("asks")(13)(1)
+
+UserForm1.lblData2Bid1.Caption = json("bids")(1)(1)
+UserForm1.lblData2Bid2.Caption = json("bids")(2)(1)
+UserForm1.lblData2Bid3.Caption = json("bids")(3)(1)
+UserForm1.lblData2Bid4.Caption = json("bids")(4)(1)
+UserForm1.lblData2Bid5.Caption = json("bids")(5)(1)
+UserForm1.lblData2Bid6.Caption = json("bids")(6)(1)
+UserForm1.lblData2Bid7.Caption = json("bids")(7)(1)
+UserForm1.lblData2Bid8.Caption = json("bids")(8)(1)
+UserForm1.lblData2Bid9.Caption = json("bids")(9)(1)
+UserForm1.lblData2Bid10.Caption = json("bids")(10)(1)
+UserForm1.lblData2Bid11.Caption = json("bids")(11)(1)
+UserForm1.lblData2Bid12.Caption = json("bids")(12)(1)
+UserForm1.lblData2Bid13.Caption = json("bids")(13)(1)
+
+
+Done:  Exit Sub
+
+noticker:
+    MsgBox "This trading pair '" & symbol & "' is not supported on Binance."
+
+End Sub

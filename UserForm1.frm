@@ -1,6 +1,6 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1 
-   Caption         =   "UserForm1"
+   Caption         =   "Excelliarmus"
    ClientHeight    =   11010
    ClientLeft      =   120
    ClientTop       =   465
@@ -84,6 +84,7 @@ Private Sub btnStartData1_Click()
     Do Until Not ModData.get_isDataStream1On
         Call ModData.writeData1(UserForm1.inputData1)
         Call ModData.displayData1
+        Call ModData.displayBidAsk1(UserForm1.inputData1)
         Application.Wait (Now + TimeValue("00:00:02"))
         DoEvents
     Loop
@@ -95,6 +96,7 @@ Private Sub btnStartData2_Click()
     Call ModData.activateDataStream2
     Do Until Not ModData.get_isDataStream2On
         Call ModData.displayData2(UserForm1.inputData2)
+        Call ModData.displayBidAsk2(UserForm1.inputData2)
         Application.Wait (Now + TimeValue("00:00:01"))
         DoEvents
     Loop
@@ -201,8 +203,17 @@ Private Sub Label6_Click()
 
 End Sub
 
+Private Sub Label20_Click()
+
+End Sub
+
+Private Sub Label30_Click()
+
+End Sub
+
 Sub UserForm_Activate()
 
 Call ModMakeUserFormResizable.MakeFormResizable
+Call ModData.initializeData(UserForm1.inputData1, UserForm1.inputData2)
 
 End Sub
