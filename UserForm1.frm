@@ -169,17 +169,6 @@ Unload Me
 End Sub
 
 
-Private Sub TextBox1_Change()
-
-End Sub
-
-Private Sub CommandButton3_Click()
-
-End Sub
-
-Private Sub CommandButton1_Click()
-
-End Sub
 
 Private Sub btnTrading1_Click()
 
@@ -187,19 +176,9 @@ Call ModTrading.buyBTCUSDT(UserForm1.inputBalances1, UserForm1.inputBalances2)
 
 End Sub
 
-Private Sub frmAbout_Click()
 
-End Sub
 
-Private Sub frmBalances_Click()
-
-End Sub
-
-Private Sub Label10_Click()
-
-End Sub
-
-Private Sub Label6_Click()
+Private Sub Label19_Click()
 
 End Sub
 
@@ -207,7 +186,12 @@ Private Sub Label20_Click()
 
 End Sub
 
-Private Sub Label30_Click()
+Private Sub lblAboutEmail_Click()
+ActiveWorkbook.FollowHyperlink Address:="mailto:excelliarmus@proton.me", NewWindow:=True
+End Sub
+
+Private Sub lblAboutRepo_Click()
+ActiveWorkbook.FollowHyperlink Address:="https://github.com/excelliarmus/app", NewWindow:=True
 
 End Sub
 
