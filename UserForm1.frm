@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1 
    Caption         =   "UserForm1"
-   ClientHeight    =   11025
+   ClientHeight    =   11010
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   15750
+   ClientWidth     =   15765
    OleObjectBlob   =   "UserForm1.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -186,6 +186,10 @@ Call ModTrading.buyBTCUSDT(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
 Private Sub frmAbout_Click()
+
+End Sub
+
+Private Sub frmBalances_Click()
 
 End Sub
 
