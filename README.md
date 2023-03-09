@@ -25,7 +25,7 @@ The goal of this repo is to provide a monitoring of the project progress, by set
 ### Milestones :
 
 - [X] Data tab 👉 Dynamic candlesticks chart (~ 20 candles) 1 min + Same but linear and 1 sec.
-- [ ] Balances tab 👉 Input field to enter Binance testnet API keys + display balances + button to refresh / auto-refresh
+- [/] Balances tab 👉 Input field to enter Binance testnet API keys + display balances + button to refresh / auto-refresh
 - [ ] Trading tab 👉 Buttons to buy / sell / TP / SL (if possible) + Auto strategies : Mean-reversion & Momentum
 - [ ] Prediction tab (if enough time) 👉 SVM from scratch (functions .fit and .predict) or from Python Server (HTTP req. to API) + (if time) connection between predictions and actions on exchange(s)
-- [ ] About tab 👉 Link to this repo, details about the project, share buttons etc.
+- [X] About tab 👉 Link to this repo, details about the project, share buttons etc.
