@@ -1,5 +1,36 @@
 Attribute VB_Name = "ModBalances"
+Public isBalancesGlobalStreamOn As Boolean
 
+Public isBNBStreamOn As Boolean
+Public isBTCStreamOn As Boolean
+Public isBUSDStreamOn As Boolean
+Public isETHStreamOn As Boolean
+Public isLTCStreamOn As Boolean
+Public isTRXStreamOn As Boolean
+Public isUSDTStreamOn As Boolean
+Public isXRPStreamOn As Boolean
+
+Sub powerOnGlobalStream()
+    isBalancesGlobalStreamOn = True
+    UserForm1.lblBalancesStatus.BorderColor = &HFF00&
+    UserForm1.lblBalancesStatus.Caption = "ON"
+    UserForm1.lblBalancesStatus.ForeColor = &HFF00&
+
+End Sub
+
+Sub powerOffGlobalStream()
+    isBalancesGlobalStreamOn = False
+    UserForm1.lblBalancesStatus.BorderColor = &HFF&
+    UserForm1.lblBalancesStatus.Caption = "OFF"
+    UserForm1.lblBalancesStatus.ForeColor = &HFF&
+
+End Sub
+
+Function get_isGlobalStream1On()
+
+    get_isGlobalStream1On = isBalancesGlobalStreamOn
+
+End Function
 
 Sub UpdateBalances(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
@@ -15,6 +46,7 @@ Sub UpdateBalances(APIkey As String, secret_key As String)
     xmlhttp.Open "GET", Url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
+    
     
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
     
@@ -89,22 +121,78 @@ Sub UpdateBalances(APIkey As String, secret_key As String)
     ' Sheets("Balances").Cells(i, 2) = json("balances")(i)("free")
     'Next
     
-    UserForm1.lblBalancesBNB.Caption = json("balances")(1)("free")
-    UserForm1.lblBalancesBTC.Caption = json("balances")(2)("free")
-    UserForm1.lblBalancesBUSD.Caption = json("balances")(3)("free")
-    UserForm1.lblBalancesETH.Caption = json("balances")(4)("free")
-    UserForm1.lblBalancesLTC.Caption = json("balances")(5)("free")
-    UserForm1.lblBalancesTRX.Caption = json("balances")(6)("free")
-    UserForm1.lblBalancesUSDT.Caption = json("balances")(7)("free")
-    UserForm1.lblBalancesXRP.Caption = json("balances")(8)("free")
+    Dim bnb, btc, busd, eth, ltc, trx, usdt, xrp
+    
+    bnb = json("balances")(1)("free")
+    UserForm1.lblBalancesBNB.Caption = bnb
+    UserForm1.lblBalancesBNBtoUSD = Replace(getToUSD("BNBUSDT", CDbl(Replace(bnb, ".", ","))), ",", ".")
+    
+    btc = json("balances")(2)("free")
+    UserForm1.lblBalancesBTC.Caption = btc
+    UserForm1.lblBalancesBTCtoUSD = Replace(getToUSD("BTCUSDT", CDbl(Replace(btc, ".", ","))), ",", ".")
+    
+    busd = json("balances")(3)("free")
+    UserForm1.lblBalancesBUSD.Caption = busd
+    UserForm1.lblBalancesBUSDtoUSD = Replace(getToUSD("BUSDUSDT", CDbl(Replace(busd, ".", ","))), ",", ".")
+    
+    eth = json("balances")(4)("free")
+    UserForm1.lblBalancesETH.Caption = eth
+    UserForm1.lblBalancesETHtoUSD = Replace(getToUSD("ETHUSDT", CDbl(Replace(eth, ".", ","))), ",", ".")
+    
+    ltc = json("balances")(5)("free")
+    UserForm1.lblBalancesLTC.Caption = ltc
+    UserForm1.lblBalancesLTCtoUSD = Replace(getToUSD("LTCUSDT", CDbl(Replace(ltc, ".", ","))), ",", ".")
+    
+    trx = json("balances")(6)("free")
+    UserForm1.lblBalancesTRX.Caption = trx
+    UserForm1.lblBalancesTRXtoUSD = Replace(getToUSD("TRXUSDT", CDbl(Replace(trx, ".", ","))), ",", ".")
+    
+    usdt = json("balances")(7)("free")
+    UserForm1.lblBalancesUSDT.Caption = usdt
+    UserForm1.lblBalancesUSDTtoUSD = Replace(CDbl(Replace(usdt, ".", ",")) * 0.989, ",", ".")
+    
+    xrp = json("balances")(8)("free")
+    UserForm1.lblBalancesXRP.Caption = xrp
+    UserForm1.lblBalancesXRPtoUSD = Replace(getToUSD("XRPUSDT", CDbl(Replace(xrp, ".", ","))), ",", ".")
+
+    
+    'UserForm1.lblBalancesBUSD.Caption = json("balances")(3)("free")
+    'UserForm1.lblBalancesETH.Caption = json("balances")(4)("free")
+    'UserForm1.lblBalancesLTC.Caption = json("balances")(5)("free")
+    'UserForm1.lblBalancesTRX.Caption = json("balances")(6)("free")
+    'UserForm1.lblBalancesUSDT.Caption = json("balances")(7)("free")
+    'UserForm1.lblBalancesXRP.Caption = json("balances")(8)("free")
+    UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
     
 Done:
     Exit Sub
     
 error_apikey:
+        powerOffGlobalStream
         MsgBox "API Key / Secret Key invalid."
 
 End Sub
+
+Function getOverallBalanceUSD()
+    Dim res
+    res = CDbl(Replace(UserForm1.lblBalancesBNBtoUSD, ".", ",")) _
+    + CDbl(Replace(UserForm1.lblBalancesBTCtoUSD, ".", ",")) _
+    + CDbl(Replace(UserForm1.lblBalancesBUSDtoUSD, ".", ",")) _
+    + CDbl(Replace(UserForm1.lblBalancesETHtoUSD, ".", ",")) _
+    + CDbl(Replace(UserForm1.lblBalancesLTCtoUSD, ".", ",")) _
+    + CDbl(Replace(UserForm1.lblBalancesTRXtoUSD, ".", ",")) _
+    + CDbl(Replace(UserForm1.lblBalancesUSDTtoUSD, ".", ",")) _
+    + CDbl(Replace(UserForm1.lblBalancesXRPtoUSD, ".", ","))
+    getOverallBalanceUSD = Replace(res, ",", ".")
+
+End Function
+
+Function getToUSD(ticker As String, quantity As Double)
+    Dim res
+    res = ModData.getCurrentPrice(ticker) * quantity * 0.989 ' 1 USD = 0.989 USDT
+    'MsgBox "res = " & ModData.getCurrentPrice(ticker) & " * " & quantity & " * 0.989"
+    getToUSD = res
+End Function
 
 Sub UpdateBNB(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
@@ -119,12 +207,17 @@ Sub UpdateBNB(APIkey As String, secret_key As String)
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
-    On Error GoTo error_apikey
-    UserForm1.lblBalancesBNB.Caption = json("balances")(1)("free")
-Done:
-    Exit Sub
-error_apikey:
-        MsgBox "API Key / Secret Key invalid."
+    'On Error GoTo error_apikey
+    'UserForm1.lblBalancesBNB.Caption = json("balances")(1)("free")
+    bnb = json("balances")(1)("free")
+    UserForm1.lblBalancesBNB.Caption = bnb
+    UserForm1.lblBalancesBNBtoUSD = Replace(getToUSD("BNBUSDT", CDbl(Replace(bnb, ".", ","))), ",", ".")
+    UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
+'Done:
+'    Exit Sub
+'error_apikey:
+'        isBNBStreamOn = False
+'        MsgBox "API Key / Secret Key invalid."
 End Sub
 
 Sub UpdateBTC(APIkey As String, secret_key As String)
@@ -141,10 +234,15 @@ Sub UpdateBTC(APIkey As String, secret_key As String)
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
     On Error GoTo error_apikey
-    UserForm1.lblBalancesBTC.Caption = json("balances")(2)("free")
+    'UserForm1.lblBalancesBTC.Caption = json("balances")(2)("free")
+    btc = json("balances")(2)("free")
+    UserForm1.lblBalancesBTC.Caption = btc
+    UserForm1.lblBalancesBTCtoUSD = Replace(getToUSD("BTCUSDT", CDbl(Replace(btc, ".", ","))), ",", ".")
+    UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
 Done:
     Exit Sub
 error_apikey:
+        isBTCStreamOn = False
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -162,10 +260,15 @@ Sub UpdateBUSD(APIkey As String, secret_key As String)
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
     On Error GoTo error_apikey
-    UserForm1.lblBalancesBUSD.Caption = json("balances")(3)("free")
+    'UserForm1.lblBalancesBUSD.Caption = json("balances")(3)("free")
+    busd = json("balances")(3)("free")
+    UserForm1.lblBalancesBUSD.Caption = busd
+    UserForm1.lblBalancesBUSDtoUSD = Replace(getToUSD("BUSDUSDT", CDbl(Replace(busd, ".", ","))), ",", ".")
+    UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
 Done:
     Exit Sub
 error_apikey:
+        isBUSDStreamOn = False
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -183,10 +286,15 @@ Sub UpdateETH(APIkey As String, secret_key As String)
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
     On Error GoTo error_apikey
-    UserForm1.lblBalancesETH.Caption = json("balances")(4)("free")
+    'UserForm1.lblBalancesETH.Caption = json("balances")(4)("free")
+    eth = json("balances")(4)("free")
+    UserForm1.lblBalancesETH.Caption = eth
+    UserForm1.lblBalancesETHtoUSD = Replace(getToUSD("ETHUSDT", CDbl(Replace(eth, ".", ","))), ",", ".")
+    UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
 Done:
     Exit Sub
 error_apikey:
+        isETHStreamOn = False
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -204,10 +312,15 @@ Sub UpdateLTC(APIkey As String, secret_key As String)
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
     On Error GoTo error_apikey
-    UserForm1.lblBalancesLTC.Caption = json("balances")(5)("free")
+    'UserForm1.lblBalancesLTC.Caption = json("balances")(5)("free")
+    ltc = json("balances")(5)("free")
+    UserForm1.lblBalancesLTC.Caption = ltc
+    UserForm1.lblBalancesLTCtoUSD = Replace(getToUSD("LTCUSDT", CDbl(Replace(ltc, ".", ","))), ",", ".")
+    UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
 Done:
     Exit Sub
 error_apikey:
+        isLTCStreamOn = False
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -225,10 +338,15 @@ Sub UpdateTRX(APIkey As String, secret_key As String)
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
     On Error GoTo error_apikey
-    UserForm1.lblBalancesTRX.Caption = json("balances")(6)("free")
+    'UserForm1.lblBalancesTRX.Caption = json("balances")(6)("free")
+    trx = json("balances")(6)("free")
+    UserForm1.lblBalancesTRX.Caption = trx
+    UserForm1.lblBalancesTRXtoUSD = Replace(getToUSD("TRXUSDT", CDbl(Replace(trx, ".", ","))), ",", ".")
+    UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
 Done:
     Exit Sub
 error_apikey:
+        isTRXStreamOn = False
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -246,10 +364,14 @@ Sub UpdateUSDT(APIkey As String, secret_key As String)
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
     On Error GoTo error_apikey
-    UserForm1.lblBalancesUSDT.Caption = json("balances")(7)("free")
+    ' UserForm1.lblBalancesUSDT.Caption = json("balances")(7)("free")
+    usdt = json("balances")(7)("free")
+    UserForm1.lblBalancesUSDT.Caption = usdt
+    UserForm1.lblBalancesUSDTtoUSD = Replace(CDbl(Replace(usdt, ".", ",")) * 0.989, ",", ".")
 Done:
     Exit Sub
 error_apikey:
+        isUSDTStreamOn = False
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -267,9 +389,14 @@ Sub UpdateXRP(APIkey As String, secret_key As String)
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
     On Error GoTo error_apikey
-    UserForm1.lblBalancesXRP.Caption = json("balances")(8)("free")
+    'UserForm1.lblBalancesXRP.Caption = json("balances")(8)("free")
+    xrp = json("balances")(8)("free")
+    UserForm1.lblBalancesXRP.Caption = xrp
+    UserForm1.lblBalancesXRPtoUSD = Replace(getToUSD("XRPUSDT", CDbl(Replace(xrp, ".", ","))), ",", ".")
+    UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
 Done:
     Exit Sub
 error_apikey:
+        isXRPStreamOn = False
         MsgBox "API Key / Secret Key invalid."
 End Sub

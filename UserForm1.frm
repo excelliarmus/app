@@ -17,11 +17,24 @@ Attribute VB_Exposed = False
 
 
 
-Private Sub btnBalances1_Click()
+Private Sub btnBalancesGetBalances_Click()
 
 Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
 
 
+End Sub
+
+Private Sub btnBalancesStartGlobal_Click()
+    Call ModBalances.powerOnGlobalStream
+    Do Until Not ModBalances.get_isGlobalStream1On
+        Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
+        Application.Wait (Now + TimeValue("00:00:02"))
+        DoEvents
+    Loop
+End Sub
+
+Private Sub btnBalancesStopGlobal_Click()
+    Call ModBalances.powerOffGlobalStream
 End Sub
 
 Private Sub btnBalancesUpdateBNB_Click()
@@ -177,6 +190,10 @@ Call ModTrading.buyBTCUSDT(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
 
+
+Private Sub frmAbout_Click()
+
+End Sub
 
 Private Sub Label19_Click()
 
