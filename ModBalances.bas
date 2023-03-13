@@ -26,6 +26,136 @@ Sub powerOffGlobalStream()
 
 End Sub
 
+Sub powerOnBNBStream()
+    isBNBStreamOn = True
+    UserForm1.lblBalancesBNBStatus.BorderColor = &HFF00&
+    UserForm1.lblBalancesBNBStatus.Caption = "ON"
+    UserForm1.lblBalancesBNBStatus.ForeColor = &HFF00&
+
+End Sub
+
+Sub powerOffBNBStream()
+    isBNBStreamOn = False
+    UserForm1.lblBalancesBNBStatus.BorderColor = &HFF&
+    UserForm1.lblBalancesBNBStatus.Caption = "OFF"
+    UserForm1.lblBalancesBNBStatus.ForeColor = &HFF&
+
+End Sub
+
+
+Sub powerOnBTCStream()
+    isBTCStreamOn = True
+    UserForm1.lblBalancesBTCStatus.BorderColor = &HFF00&
+    UserForm1.lblBalancesBTCStatus.Caption = "ON"
+    UserForm1.lblBalancesBTCStatus.ForeColor = &HFF00&
+
+End Sub
+
+Sub powerOffBTCStream()
+    isBTCStreamOn = False
+    UserForm1.lblBalancesBTCStatus.BorderColor = &HFF&
+    UserForm1.lblBalancesBTCStatus.Caption = "OFF"
+    UserForm1.lblBalancesBTCStatus.ForeColor = &HFF&
+
+End Sub
+
+Sub powerOnBUSDStream()
+    isBUSDStreamOn = True
+    UserForm1.lblBalancesBUSDStatus.BorderColor = &HFF00&
+    UserForm1.lblBalancesBUSDStatus.Caption = "ON"
+    UserForm1.lblBalancesBUSDStatus.ForeColor = &HFF00&
+
+End Sub
+
+Sub powerOffBUSDStream()
+    isBUSDStreamOn = False
+    UserForm1.lblBalancesBUSDStatus.BorderColor = &HFF&
+    UserForm1.lblBalancesBUSDStatus.Caption = "OFF"
+    UserForm1.lblBalancesBUSDStatus.ForeColor = &HFF&
+
+End Sub
+
+Sub powerOnETHStream()
+    isETHStreamOn = True
+    UserForm1.lblBalancesETHStatus.BorderColor = &HFF00&
+    UserForm1.lblBalancesETHStatus.Caption = "ON"
+    UserForm1.lblBalancesETHStatus.ForeColor = &HFF00&
+
+End Sub
+
+Sub powerOffETHStream()
+    isETHStreamOn = False
+    UserForm1.lblBalancesETHStatus.BorderColor = &HFF&
+    UserForm1.lblBalancesETHStatus.Caption = "OFF"
+    UserForm1.lblBalancesETHStatus.ForeColor = &HFF&
+
+End Sub
+
+
+Sub powerOnLTCStream()
+    isLTCStreamOn = True
+    UserForm1.lblBalancesLTCStatus.BorderColor = &HFF00&
+    UserForm1.lblBalancesLTCStatus.Caption = "ON"
+    UserForm1.lblBalancesLTCStatus.ForeColor = &HFF00&
+
+End Sub
+
+Sub powerOffLTCStream()
+    isLTCStreamOn = False
+    UserForm1.lblBalancesLTCStatus.BorderColor = &HFF&
+    UserForm1.lblBalancesLTCStatus.Caption = "OFF"
+    UserForm1.lblBalancesLTCStatus.ForeColor = &HFF&
+
+End Sub
+
+Sub powerOnTRXStream()
+    isTRXStreamOn = True
+    UserForm1.lblBalancesTRXStatus.BorderColor = &HFF00&
+    UserForm1.lblBalancesTRXStatus.Caption = "ON"
+    UserForm1.lblBalancesTRXStatus.ForeColor = &HFF00&
+
+End Sub
+
+Sub powerOffTRXStream()
+    isTRXStreamOn = False
+    UserForm1.lblBalancesTRXStatus.BorderColor = &HFF&
+    UserForm1.lblBalancesTRXStatus.Caption = "OFF"
+    UserForm1.lblBalancesTRXStatus.ForeColor = &HFF&
+
+End Sub
+
+Sub powerOnUSDTStream()
+    isUSDTStreamOn = True
+    UserForm1.lblBalancesUSDTStatus.BorderColor = &HFF00&
+    UserForm1.lblBalancesUSDTStatus.Caption = "ON"
+    UserForm1.lblBalancesUSDTStatus.ForeColor = &HFF00&
+
+End Sub
+
+Sub powerOffUSDTStream()
+    isUSDTStreamOn = False
+    UserForm1.lblBalancesUSDTStatus.BorderColor = &HFF&
+    UserForm1.lblBalancesUSDTStatus.Caption = "OFF"
+    UserForm1.lblBalancesUSDTStatus.ForeColor = &HFF&
+
+End Sub
+
+Sub powerOnXRPStream()
+    isXRPStreamOn = True
+    UserForm1.lblBalancesXRPStatus.BorderColor = &HFF00&
+    UserForm1.lblBalancesXRPStatus.Caption = "ON"
+    UserForm1.lblBalancesXRPStatus.ForeColor = &HFF00&
+
+End Sub
+
+Sub powerOffXRPStream()
+    isXRPStreamOn = False
+    UserForm1.lblBalancesXRPStatus.BorderColor = &HFF&
+    UserForm1.lblBalancesXRPStatus.Caption = "OFF"
+    UserForm1.lblBalancesXRPStatus.ForeColor = &HFF&
+
+End Sub
+
 Function get_isGlobalStream1On()
 
     get_isGlobalStream1On = isBalancesGlobalStreamOn
@@ -207,17 +337,17 @@ Sub UpdateBNB(APIkey As String, secret_key As String)
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
-    'On Error GoTo error_apikey
+    On Error GoTo error_apikey
     'UserForm1.lblBalancesBNB.Caption = json("balances")(1)("free")
     bnb = json("balances")(1)("free")
     UserForm1.lblBalancesBNB.Caption = bnb
     UserForm1.lblBalancesBNBtoUSD = Replace(getToUSD("BNBUSDT", CDbl(Replace(bnb, ".", ","))), ",", ".")
     UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
-'Done:
-'    Exit Sub
-'error_apikey:
-'        isBNBStreamOn = False
-'        MsgBox "API Key / Secret Key invalid."
+Done:
+    Exit Sub
+error_apikey:
+        isBNBStreamOn = False
+        MsgBox "API Key / Secret Key invalid."
 End Sub
 
 Sub UpdateBTC(APIkey As String, secret_key As String)

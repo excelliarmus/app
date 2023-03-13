@@ -24,6 +24,44 @@ Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalance
 
 End Sub
 
+Private Sub btnBalancesStartBNB_Click()
+    Call ModBalances.powerOnBNBStream
+    Do Until Not ModBalances.isBNBStreamOn
+        Call ModBalances.UpdateBNB(UserForm1.inputBalances1, UserForm1.inputBalances2)
+        Application.Wait (Now + TimeValue("00:00:02"))
+        DoEvents
+    Loop
+End Sub
+
+Private Sub btnBalancesStartBTC_Click()
+    Call ModBalances.powerOnBTCStream
+    Do Until Not ModBalances.isBTCStreamOn
+        Call ModBalances.UpdateBTC(UserForm1.inputBalances1, UserForm1.inputBalances2)
+        Application.Wait (Now + TimeValue("00:00:02"))
+        DoEvents
+    Loop
+
+End Sub
+
+Private Sub btnBalancesStartBUSD_Click()
+    Call ModBalances.powerOnBUSDStream
+    Do Until Not ModBalances.isBUSDStreamOn
+        Call ModBalances.UpdateBUSD(UserForm1.inputBalances1, UserForm1.inputBalances2)
+        Application.Wait (Now + TimeValue("00:00:02"))
+        DoEvents
+    Loop
+
+End Sub
+
+Private Sub btnBalancesStartETH_Click()
+    Call ModBalances.powerOnETHStream
+    Do Until Not ModBalances.isETHStreamOn
+        Call ModBalances.UpdateETH(UserForm1.inputBalances1, UserForm1.inputBalances2)
+        Application.Wait (Now + TimeValue("00:00:02"))
+        DoEvents
+    Loop
+End Sub
+
 Private Sub btnBalancesStartGlobal_Click()
     Call ModBalances.powerOnGlobalStream
     Do Until Not ModBalances.get_isGlobalStream1On
@@ -33,8 +71,76 @@ Private Sub btnBalancesStartGlobal_Click()
     Loop
 End Sub
 
+Private Sub btnBalancesStartLTC_Click()
+    Call ModBalances.powerOnLTCStream
+    Do Until Not ModBalances.isLTCStreamOn
+        Call ModBalances.UpdateLTC(UserForm1.inputBalances1, UserForm1.inputBalances2)
+        Application.Wait (Now + TimeValue("00:00:02"))
+        DoEvents
+    Loop
+End Sub
+
+Private Sub btnBalancesStartTRX_Click()
+    Call ModBalances.powerOnTRXStream
+    Do Until Not ModBalances.isTRXStreamOn
+        Call ModBalances.UpdateTRX(UserForm1.inputBalances1, UserForm1.inputBalances2)
+        Application.Wait (Now + TimeValue("00:00:02"))
+        DoEvents
+    Loop
+End Sub
+
+Private Sub btnBalancesStartUSDT_Click()
+    Call ModBalances.powerOnUSDTStream
+    Do Until Not ModBalances.isUSDTStreamOn
+        Call ModBalances.UpdateUSDT(UserForm1.inputBalances1, UserForm1.inputBalances2)
+        Application.Wait (Now + TimeValue("00:00:02"))
+        DoEvents
+    Loop
+End Sub
+
+Private Sub btnBalancesStartXRP_Click()
+    Call ModBalances.powerOnXRPStream
+    Do Until Not ModBalances.isXRPStreamOn
+        Call ModBalances.UpdateXRP(UserForm1.inputBalances1, UserForm1.inputBalances2)
+        Application.Wait (Now + TimeValue("00:00:02"))
+        DoEvents
+    Loop
+End Sub
+
+Private Sub btnBalancesStopBNB_Click()
+    Call ModBalances.powerOffBNBStream
+End Sub
+
+Private Sub btnBalancesStopBTC_Click()
+    Call ModBalances.powerOffBTCStream
+End Sub
+
+Private Sub btnBalancesStopBUSD_Click()
+    Call ModBalances.powerOffBUSDStream
+End Sub
+
+Private Sub btnBalancesStopETH_Click()
+    Call ModBalances.powerOffETHStream
+End Sub
+
 Private Sub btnBalancesStopGlobal_Click()
     Call ModBalances.powerOffGlobalStream
+End Sub
+
+Private Sub btnBalancesStopLTC_Click()
+    Call ModBalances.powerOffLTCStream
+End Sub
+
+Private Sub btnBalancesStopTRX_Click()
+    Call ModBalances.powerOffTRXStream
+End Sub
+
+Private Sub btnBalancesStopUSDT_Click()
+    Call ModBalances.powerOffUSDTStream
+End Sub
+
+Private Sub btnBalancesStopXRP_Click()
+    Call ModBalances.powerOffXRPStream
 End Sub
 
 Private Sub btnBalancesUpdateBNB_Click()
