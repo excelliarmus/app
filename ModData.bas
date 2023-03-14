@@ -249,6 +249,7 @@ Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
 Dim json As Object
 Dim newPrice As Double
 
+
 On Error GoTo noticker
 
 Url = "https://api.binance.com/api/v3/ticker/price?symbol=" & symbol

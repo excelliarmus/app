@@ -288,14 +288,23 @@ Unload Me
 End Sub
 
 
-
-Private Sub btnTrading1_Click()
-
-Call ModTrading.buyBTCUSDT(UserForm1.inputBalances1, UserForm1.inputBalances2)
-
+Private Sub btnTradingPlaceOrder_Click()
+    Call ModTrading.placeOrder(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
+Private Sub btnTradingStartBot_Click()
+    If UserForm1.tglTradingRandomBot.Value = True Then
+        ModTrading.isRandomBotOn = True
+        Call ModTrading.runRandomBot
+    Else
+    MsgBox ("TODO")
+    End If
+    
+End Sub
 
+Private Sub btnTradingStopBot_Click()
+    ModTrading.isRandomBotOn = False
+End Sub
 
 Private Sub frmAbout_Click()
 
@@ -306,6 +315,10 @@ Private Sub Label19_Click()
 End Sub
 
 Private Sub Label20_Click()
+
+End Sub
+
+Private Sub Label60_Click()
 
 End Sub
 

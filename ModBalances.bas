@@ -164,7 +164,7 @@ End Function
 
 Sub UpdateBalances(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
@@ -326,7 +326,7 @@ End Function
 
 Sub UpdateBNB(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
@@ -352,7 +352,7 @@ End Sub
 
 Sub UpdateBTC(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
@@ -378,7 +378,7 @@ End Sub
 
 Sub UpdateBUSD(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
@@ -404,7 +404,7 @@ End Sub
 
 Sub UpdateETH(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
@@ -430,7 +430,7 @@ End Sub
 
 Sub UpdateLTC(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
@@ -456,7 +456,7 @@ End Sub
 
 Sub UpdateTRX(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
@@ -482,7 +482,7 @@ End Sub
 
 Sub UpdateUSDT(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
@@ -507,7 +507,7 @@ End Sub
 
 Sub UpdateXRP(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object

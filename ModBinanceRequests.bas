@@ -58,16 +58,16 @@ End Function
 
 Function getTimeStampForBinance()
     Dim timestamp_string As String
-    Dim timestamp_vba As LongLong
-    Dim timestamp_real As LongLong
-    Dim timestamp_binance As LongLong
+    Dim timestamp_vba As Double
+    Dim timestamp_real As Double
+    Dim timestamp_binance As Double
     
     timestamp_string = Split((DateDiff("s", "01/01/1970", Date) + Timer) * 1000, ",")(0)
     'MsgBox timestamp_string
-    timestamp_vba = CLngLng(timestamp_string)
+    timestamp_vba = CDbl(timestamp_string)
     ' VBA's ts is 3594104 ahead
     timestamp_real = timestamp_vba - 3594104
-    timestamp_binance = timestamp_real - 70000 '50000
+    timestamp_binance = timestamp_real - 70000 '50000 sur les PC de la FAC
     
     getTimeStampForBinance = timestamp_binance
 
