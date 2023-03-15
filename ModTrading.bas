@@ -36,13 +36,84 @@ error:
         MsgBox "An error occured : " & xmlhttp.responseText
 End Function
 
+Function placeLimitOrder(APIkey As String, secret_key As String, side As String, ticker As String, qt As String, limit_price As String)
+    Dim xmlhttp As Object
+    Dim timestamp As LongLong
+    Dim signature As String
+    Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+    Dim json As Object
+    timestamp = ModBinanceRequests.getTimeStampForBinance
+    On Error GoTo error
+    If side = "BUY" Then
+        signature = ModBinanceRequests.getSignature("recvWindow=59999&symbol=" & ticker & "&side=BUY&type=LIMIT&quantity=" & qt & "&price=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp, secret_key)
+        Url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=BUY&type=LIMIT&quantity=" & qt & "&price=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
+    Else
+        signature = ModBinanceRequests.getSignature("recvWindow=59999&symbol=" & ticker & "&side=SELL&type=LIMIT&quantity=" & qt & "&price=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp, secret_key)
+        Url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=SELL&type=LIMIT&quantity=" & qt & "&price=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
+    End If
+    xmlhttp.Open "POST", Url, False
+    xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
+    xmlhttp.Send
+    Set json = JsonConverter.ParseJson(xmlhttp.responseText)
+    'On Error GoTo error_apikey
+    'MsgBox xmlhttp.responseText
+    If json("symbol") = ticker Then
+        placeLimitOrder = "success"
+    Else:
+        placeLimitOrder = xmlhttp.responseText
+    End If
+    
+    
+Done:
+    Exit Function
+error:
+        MsgBox "An error occured : " & xmlhttp.responseText
+End Function
+
+Function placeSLOrder(APIkey As String, secret_key As String, side As String, ticker As String, qt As String, limit_price As String)
+    Dim xmlhttp As Object
+    Dim timestamp As LongLong
+    Dim signature As String
+    Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+    Dim json As Object
+    timestamp = ModBinanceRequests.getTimeStampForBinance
+    On Error GoTo error
+    If side = "BUY" Then
+        signature = ModBinanceRequests.getSignature("recvWindow=59999&symbol=" & ticker & "&side=BUY&type=STOP_LOSS_LIMIT&quantity=" & qt & "&price=" & limit_price & "&stopPrice=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp, secret_key)
+        Url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=BUY&type=STOP_LOSS_LIMIT&quantity=" & qt & "&price=" & limit_price & "&stopPrice=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
+    Else
+        signature = ModBinanceRequests.getSignature("recvWindow=59999&symbol=" & ticker & "&side=SELL&type=STOP_LOSS_LIMIT&quantity=" & qt & "&price=" & limit_price & "&stopPrice=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp, secret_key)
+        Url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=SELL&type=STOP_LOSS_LIMIT&quantity=" & qt & "&price=" & limit_price & "&stopPrice=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
+    End If
+    xmlhttp.Open "POST", Url, False
+    xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
+    xmlhttp.Send
+    Set json = JsonConverter.ParseJson(xmlhttp.responseText)
+    'On Error GoTo error_apikey
+    'MsgBox xmlhttp.responseText
+    If json("symbol") = ticker Then
+        placeSLOrder = "success"
+    Else:
+        placeSLOrder = xmlhttp.responseText
+    End If
+    
+    
+Done:
+    Exit Function
+error:
+        MsgBox "An error occured : " & xmlhttp.responseText
+End Function
+
 Sub placeOrder(APIkey As String, secret_key As String)
     Dim ticker As String
     Dim qt As String
     Dim signal As String
+    Dim limit_price As String
+    
     
     ticker = UserForm1.inputTradingTicker
     qt = UserForm1.inputTradingQuantity
+    limit_price = UserForm1.inputTradingLimitPrice
     
 
     
@@ -51,20 +122,55 @@ Sub placeOrder(APIkey As String, secret_key As String)
             'BUY MARKET
             signal = placeMarketOrder(APIkey, secret_key, "BUY", ticker, qt)
             If signal = "success" Then
-                addLog ("BUY " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker))
+                addLog (get_time_for_logs & " : " & ChrW(9650) & " BUY " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker))
             Else
                 addLog (signal)
             End If
-            ElseIf UserForm1.optTradingSell.Value = True Then
+        ElseIf UserForm1.optTradingSell.Value = True Then
             'SELL MARKET
             signal = placeMarketOrder(APIkey, secret_key, "SELL", ticker, qt)
             If signal = "success" Then
-                addLog ("SELL " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker))
+                addLog (get_time_for_logs & " : " & ChrW(9660) & " SELL " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker))
             Else
                 addLog (signal)
             End If
         End If
-    ElseIf True Then
+    ElseIf UserForm1.tglTradingLimit.Value = True Then
+        If UserForm1.optTradingBuy.Value = True Then
+            'BUY LIMIT
+            signal = placeLimitOrder(APIkey, secret_key, "BUY", ticker, qt, limit_price)
+            If signal = "success" Then
+                addLog (get_time_for_logs & " : " & ChrW(9650) & " BUY LIMIT " & qt & " " & ticker & " @ " & limit_price)
+            Else
+                addLog (signal)
+            End If
+        ElseIf UserForm1.optTradingSell.Value = True Then
+            'SELL LIMIT
+            signal = placeLimitOrder(APIkey, secret_key, "SELL", ticker, qt, limit_price)
+            If signal = "success" Then
+                addLog (get_time_for_logs & " : " & ChrW(9660) & " SELL LIMIT " & qt & " " & ticker & " @ " & limit_price)
+            Else
+                addLog (signal)
+            End If
+        End If
+    ElseIf UserForm1.tglTradingSL.Value = True Then
+        If UserForm1.optTradingBuy.Value = True Then
+            'BUY STOP LOSS
+            signal = placeSLOrder(APIkey, secret_key, "BUY", ticker, qt, limit_price)
+            If signal = "success" Then
+                addLog (get_time_for_logs & " : " & ChrW(9650) & " BUY STOP LOSS " & qt & " " & ticker & " @ " & limit_price)
+            Else
+                addLog (signal)
+            End If
+        ElseIf UserForm1.optTradingSell.Value = True Then
+            'SELL STOP LOSS
+            signal = placeSLOrder(APIkey, secret_key, "SELL", ticker, qt, limit_price)
+            If signal = "success" Then
+                addLog (get_time_for_logs & " : " & ChrW(9660) & " SELL STOP LOSS " & qt & " " & ticker & " @ " & limit_price)
+            Else
+                addLog (signal)
+            End If
+        End If
     
     
     End If
@@ -225,9 +331,12 @@ Sub runRandomBot()
     Dim ticker As String
     Dim qt As String
     Dim signal As String
+    Dim frequence As String
+
     
     ticker = UserForm1.inputTradingTicker
     qt = UserForm1.inputTradingQuantity
+    frequence = UserForm1.inputTradingFrequence
     
     Do Until Not isRandomBotOn
         Dim rand As Integer
@@ -235,22 +344,127 @@ Sub runRandomBot()
         If rand = 1 Then
             signal = placeMarketOrder(UserForm1.inputBalances1, UserForm1.inputBalances2, "BUY", ticker, qt)
             If signal = "success" Then
-                addLog ("BUY " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker))
+                addLog (get_time_for_logs & " : " & ChrW(9650) & " BUY " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker))
             Else
                 addLog (signal)
             End If
         ElseIf rand = 2 Then
             signal = placeMarketOrder(UserForm1.inputBalances1, UserForm1.inputBalances2, "SELL", ticker, qt)
             If signal = "success" Then
-                addLog ("SELL " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker))
+                addLog (get_time_for_logs & " : " & ChrW(9660) & " SELL " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker))
             Else
                 addLog (signal)
             End If
         Else
-            addLog ("Let's take a break")
+            addLog (get_time_for_logs & " : Do nothing " & ChrW(9787))
         End If
         Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
-        Application.Wait (Now + TimeValue("00:00:02"))
+
+        Application.Wait (Now + TimeValue("00:00:" & frequence))
         DoEvents
     Loop
+End Sub
+
+Sub powerOnRandomTradingBot()
+    isRandomBotOn = True
+    UserForm1.lblTradingBotStatus.BorderColor = &HFF00&
+    UserForm1.lblTradingBotStatus.Caption = "ON"
+    UserForm1.lblTradingBotStatus.ForeColor = &HFF00&
+
+End Sub
+
+Sub powerOffRandomTradingBot()
+    isRandomBotOn = False
+    UserForm1.lblTradingBotStatus.BorderColor = &HFF&
+    UserForm1.lblTradingBotStatus.Caption = "OFF"
+    UserForm1.lblTradingBotStatus.ForeColor = &HFF&
+End Sub
+
+Function get_time_for_logs()
+    Dim date_now As String
+    date_now = Format(Now(), "hh:mm:ss")
+    get_time_for_logs = date_now
+End Function
+
+Sub getOpenOrders(APIkey As String, secret_key As String)
+    Dim xmlhttp As Object
+    Dim timestamp As Double
+    Dim signature As String
+    Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+    Dim json As Object
+    Dim ordersString As String
+
+    
+    timestamp = ModBinanceRequests.getTimeStampForBinance
+    signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
+    
+    Url = "https://testnet.binance.vision/api/v3/openOrders?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", Url, False
+    xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
+    xmlhttp.Send
+    
+    
+    Set json = JsonConverter.ParseJson(xmlhttp.responseText)
+'    [
+'        {
+'    "symbol": "BTCUSDT",
+'    "orderId": 11118310,
+'    "orderListId": -1,
+'    "clientOrderId": "0E8pfX91ZoJAR9qr7PwLVR",
+'    "price": "25000.00000000",
+'    "origQty": "0.00100000",
+'    "executedQty": "0.00000000",
+'    "cummulativeQuoteQty": "0.00000000",
+'    "status": "NEW",
+'    "timeInForce": "GTC",
+'    "type": "LIMIT",
+'    "side": "SELL",
+'    "stopPrice": "0.00000000",
+'    "icebergQty": "0.00000000",
+'    "time": 1678897799099,
+'    "updateTime": 1678897799099,
+'    "isWorking": true,
+'    "workingTime": 1678897799099,
+'    "origQuoteOrderQty": "0.00000000",
+'    "selfTradePreventionMode": "NONE"
+'        }
+'    ]
+    'frmOpenOrders.lblOpenOrders.Caption = xmlhttp.responseText
+    'MsgBox xmlhttp.responseText
+        For Each Item In json
+            ordersString = ordersString & ChrW(8658) & " "
+            For Each Child In Item
+                ordersString = ordersString & "[ " & Child & " : " & Item(Child) & " ] "
+                ' Debug.Print Child & " : " & Item(Child) & vbNewLine & "Line2"
+            Next Child
+            ordersString = ordersString & vbNewLine & vbNewLine
+        Next Item
+    'Debug.Print ordersString
+    frmOpenOrders.lblOpenOrders.Text = ordersString
+End Sub
+
+
+Sub getAllOrders(APIkey As String, secret_key As String)
+    Dim xmlhttp As Object
+    Dim timestamp As Double
+    Dim signature As String
+    Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+    Dim json As Object
+    Dim ordersString As String
+    timestamp = ModBinanceRequests.getTimeStampForBinance
+    signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
+    Url = "https://testnet.binance.vision/api/v3/openOrders?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", Url, False
+    xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
+    xmlhttp.Send
+    
+    Set json = JsonConverter.ParseJson(xmlhttp.responseText)
+        For Each Item In json
+            ordersString = ordersString & ChrW(8658) & " "
+            For Each Child In Item
+                ordersString = ordersString & "[ " & Child & " : " & Item(Child) & " ] "
+            Next Child
+            ordersString = ordersString & vbNewLine & vbNewLine
+        Next Item
+    frmAllOrders.lblAllOrders.Text = ordersString
 End Sub

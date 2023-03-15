@@ -288,13 +288,24 @@ Unload Me
 End Sub
 
 
+Private Sub btnTradingDisplayAllOrders_Click()
+    Call ModTrading.getAllOrders(UserForm1.inputBalances1, UserForm1.inputBalances2)
+    frmAllOrders.Show
+End Sub
+
+Private Sub btnTradingDisplayOrders_Click()
+    Call ModTrading.getOpenOrders(UserForm1.inputBalances1, UserForm1.inputBalances2)
+    frmOpenOrders.Show
+End Sub
+
 Private Sub btnTradingPlaceOrder_Click()
     Call ModTrading.placeOrder(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
 Private Sub btnTradingStartBot_Click()
+    Call ModBalances.powerOnGlobalStream
     If UserForm1.tglTradingRandomBot.Value = True Then
-        ModTrading.isRandomBotOn = True
+        Call ModTrading.powerOnRandomTradingBot
         Call ModTrading.runRandomBot
     Else
     MsgBox ("TODO")
@@ -303,7 +314,8 @@ Private Sub btnTradingStartBot_Click()
 End Sub
 
 Private Sub btnTradingStopBot_Click()
-    ModTrading.isRandomBotOn = False
+    Call ModTrading.powerOffRandomTradingBot
+    Call ModBalances.powerOffGlobalStream
 End Sub
 
 Private Sub frmAbout_Click()
@@ -319,6 +331,10 @@ Private Sub Label20_Click()
 End Sub
 
 Private Sub Label60_Click()
+
+End Sub
+
+Private Sub Label61_Click()
 
 End Sub
 
