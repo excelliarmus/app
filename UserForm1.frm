@@ -307,14 +307,20 @@ Private Sub btnTradingStartBot_Click()
     If UserForm1.tglTradingRandomBot.Value = True Then
         Call ModTrading.powerOnRandomTradingBot
         Call ModTrading.runRandomBot
-    Else
-    MsgBox ("TODO")
+    ElseIf UserForm1.tglTradingMRBot.Value = True Then
+        Call ModTrading.powerOnMRTradingBot
+        Call ModTrading.runMRBot
+    ElseIf UserForm1.tglTradingMomentumBot.Value = True Then
+        Call ModTrading.powerOnMomentumTradingBot
+        Call ModTrading.runMomentumBot
     End If
     
 End Sub
 
 Private Sub btnTradingStopBot_Click()
     Call ModTrading.powerOffRandomTradingBot
+    Call ModTrading.powerOffMRTradingBot
+    Call ModTrading.powerOffMomentumTradingBot
     Call ModBalances.powerOffGlobalStream
 End Sub
 
@@ -344,6 +350,10 @@ End Sub
 
 Private Sub lblAboutRepo_Click()
 ActiveWorkbook.FollowHyperlink Address:="https://github.com/excelliarmus/app", NewWindow:=True
+
+End Sub
+
+Private Sub tglTradingRandomBot_Click()
 
 End Sub
 
