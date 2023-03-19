@@ -324,6 +324,10 @@ Private Sub btnTradingStopBot_Click()
     Call ModBalances.powerOffGlobalStream
 End Sub
 
+Private Sub CommandButton1_Click()
+    Call modPrediction.test
+End Sub
+
 Private Sub frmAbout_Click()
 
 End Sub
