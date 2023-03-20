@@ -15,7 +15,7 @@ Private p_y_train As Variant
 Private p_predictions() As Double
 
 
-Public Sub InitiateProperties(k As Double)
+Public Sub InitiateProperties(k As Integer)
     p_k = k
 End Sub
 
@@ -46,27 +46,28 @@ Public Property Let y_train(ByVal new_y_train As Variant)
 End Property
 
 
-Public Sub fit(x As Variant, y As Variant)
-    p_X_train = x
+Public Sub fit(X As Variant, y As Variant)
+    p_X_train = X
     p_y_train = y
 End Sub
 
-Public Function predict(x() As Variant) As Integer
+Public Function predict(X() As Variant) As Integer
+
 
     Dim i As Integer
     Dim indices() As Long
     Dim lenx As Integer
-    lenx = UBound(x)
+    lenx = UBound(X)
     Dim distances() As Double
     ReDim Preserve distances(0 To UBound(p_X_train))
+    Debug.Print "1.3"
     For i = 0 To UBound(p_X_train)
-        distances(i) = euclidianDistance(x, p_X_train(i))
+        distances(i) = euclidianDistance(X, p_X_train(i))
     Next i
 
 '    For Each dist In distances
 '        Debug.Print (dist)
 '    Next dist
-    
     
 
     ' Get the indices of the k smallest values
@@ -79,6 +80,7 @@ Public Function predict(x() As Variant) As Integer
         'Debug.Print ("The label of " & indices(i) & " is " & p_y_train(indices(i)))
         nearest_labels(i) = p_y_train(indices(i))
     Next i
+    
     
 '   Dim item As Variant
 '   For Each item In nearest_labels

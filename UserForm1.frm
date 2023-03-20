@@ -198,6 +198,31 @@ Sub btnBalances_Click()
  frmBalances.Visible = True
 
 End Sub
+
+Private Sub btnPredictionStart_Click()
+    Dim ticker As String
+    Dim qt As Double
+    Dim k As Integer
+    Dim nsticks As Integer
+    Dim freq As Integer
+    Dim disc As Double
+    ticker = UserForm1.inputPredictionTicker
+    qt = CDbl(Replace(UserForm1.inputPredictionQuantity, ".", ","))
+    k = CInt(UserForm1.inputPredictionK)
+    nsticks = CInt(UserForm1.inputPredictionNumberSticks)
+    freq = CInt(UserForm1.inputPredictionFrequency)
+    disc = CDbl(Replace(UserForm1.inputPredictionDiscrimination, ".", ","))
+
+    Call modPrediction.startBot(ticker, qt, k, nsticks, freq, disc)
+
+    'Call modPrediction.predict2(50, 3)
+
+End Sub
+
+Private Sub btnPredictionStop_Click()
+    Call modPrediction.desactivateMLBot
+End Sub
+
 Private Sub btnStartData1_Click()
     Call ModData.activateDataStream1
     Do Until Not ModData.get_isDataStream1On
@@ -325,7 +350,7 @@ Private Sub btnTradingStopBot_Click()
 End Sub
 
 Private Sub CommandButton1_Click()
-    Call modPrediction.test
+    Call modPrediction.predict(10, 2)
 End Sub
 
 Private Sub frmAbout_Click()
