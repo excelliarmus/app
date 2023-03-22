@@ -13,9 +13,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
+Public isMarketToggled As Boolean
+Public isLimitToggled As Boolean
+Public isSLToggled As Boolean
+Public isRandomToggled As Boolean
+Public isMRToggled As Boolean
+Public isMomentumToggled As Boolean
 
 Private Sub btnBalancesGetBalances_Click()
 
@@ -182,6 +185,7 @@ Sub btnData_Click()
  frmTrading.Visible = False
  frmPrediction.Visible = False
  frmAbout.Visible = False
+ frmAccount.Visible = False
 
  frmData.Visible = True
 
@@ -194,33 +198,43 @@ Sub btnBalances_Click()
  frmTrading.Visible = False
  frmPrediction.Visible = False
  frmAbout.Visible = False
+ frmAccount.Visible = False
 
  frmBalances.Visible = True
 
 End Sub
 
+Private Sub btnExit_BeforeDragOver(ByVal Cancel As MSForms.ReturnBoolean, ByVal Data As MSForms.DataObject, ByVal X As Single, ByVal Y As Single, ByVal DragState As MSForms.fmDragState, ByVal Effect As MSForms.ReturnEffect, ByVal Shift As Integer)
+
+End Sub
+
+Private Sub btnHome_BeforeDragOver(ByVal Cancel As MSForms.ReturnBoolean, ByVal Data As MSForms.DataObject, ByVal X As Single, ByVal Y As Single, ByVal DragState As MSForms.fmDragState, ByVal Effect As MSForms.ReturnEffect, ByVal Shift As Integer)
+
+End Sub
+
 Private Sub btnPredictionStart_Click()
     Dim ticker As String
-    Dim qt As Double
+    Dim qt As String
     Dim k As Integer
     Dim nsticks As Integer
     Dim freq As Integer
     Dim disc As Double
     ticker = UserForm1.inputPredictionTicker
-    qt = CDbl(Replace(UserForm1.inputPredictionQuantity, ".", ","))
+    qt = UserForm1.inputPredictionQuantity
     k = CInt(UserForm1.inputPredictionK)
     nsticks = CInt(UserForm1.inputPredictionNumberSticks)
     freq = CInt(UserForm1.inputPredictionFrequency)
     disc = CDbl(Replace(UserForm1.inputPredictionDiscrimination, ".", ","))
-
+    
+    Call ModBalances.powerOnGlobalStream
     Call modPrediction.startBot(ticker, qt, k, nsticks, freq, disc)
 
-    'Call modPrediction.predict2(50, 3)
 
 End Sub
 
 Private Sub btnPredictionStop_Click()
     Call modPrediction.desactivateMLBot
+    Call ModBalances.powerOffGlobalStream
 End Sub
 
 Private Sub btnStartData1_Click()
@@ -263,6 +277,7 @@ Sub btnTrading_Click()
  'frmTrading.Visible = False
  frmPrediction.Visible = False
  frmAbout.Visible = False
+ frmAccount.Visible = False
 
  frmTrading.Visible = True
 
@@ -275,6 +290,7 @@ Sub btnPrediction_Click()
  frmTrading.Visible = False
  'frmPrediction.Visible = False
  frmAbout.Visible = False
+ frmAccount.Visible = False
 
  frmPrediction.Visible = True
 
@@ -287,8 +303,26 @@ Sub btnAbout_Click()
  frmTrading.Visible = False
  frmPrediction.Visible = False
  'frmAbout.Visible = False
+ frmAccount.Visible = False
 
  frmAbout.Visible = True
+
+End Sub
+
+Sub btnAccount_Click()
+
+ frmData.Visible = False
+ frmBalances.Visible = False
+ frmTrading.Visible = False
+ frmPrediction.Visible = False
+ 'frmAbout.Visible = False
+ frmAbout.Visible = False
+ 
+ 
+ 
+ frmAccount.Visible = True
+
+ 
 
 End Sub
 
@@ -299,6 +333,7 @@ Sub btnHome_Click()
  frmTrading.Visible = False
  frmPrediction.Visible = False
  frmAbout.Visible = False
+ frmAccount.Visible = False
 
 End Sub
 
@@ -373,17 +408,108 @@ Private Sub Label61_Click()
 
 End Sub
 
-Private Sub lblAboutEmail_Click()
+Private Sub Label92_Click()
+
+End Sub
+
+Private Sub Label93_Click()
+
+End Sub
+
+Private Sub lblAboutContact_Click()
 ActiveWorkbook.FollowHyperlink Address:="mailto:excelliarmus@proton.me", NewWindow:=True
 End Sub
 
-Private Sub lblAboutRepo_Click()
+
+Private Sub lblAboutDocs_Click()
+ActiveWorkbook.FollowHyperlink Address:="https://excelliarmus.gitbook.io/docs/", NewWindow:=True
+End Sub
+
+Private Sub lblAboutGithub_Click()
 ActiveWorkbook.FollowHyperlink Address:="https://github.com/excelliarmus/app", NewWindow:=True
+End Sub
+
+
+Private Sub lblAboutYoutube_Click()
+ActiveWorkbook.FollowHyperlink Address:="https://www.youtube.com/@Excelliarmus", NewWindow:=True
+End Sub
+
+Private Sub lblAboutEmail_Click()
 
 End Sub
 
-Private Sub tglTradingRandomBot_Click()
+Private Sub tglTradingLimit_Click()
+    If isLimitToggled Then
+        isLimitToggled = False
+        UserForm1.tglTradingLimit.BackStyle = fmBackStyleTransparent
+        UserForm1.tglTradingLimit.ForeColor = &HFFFFFF
+    Else
+        isLimitToggled = True
+        UserForm1.tglTradingLimit.BackStyle = fmBackStyleOpaque
+        UserForm1.tglTradingLimit.ForeColor = &H0&
+    End If
+End Sub
 
+Private Sub tglTradingMarket_Click()
+    If isMarketToggled Then
+        isMarketToggled = False
+        UserForm1.tglTradingMarket.BackStyle = fmBackStyleTransparent
+        UserForm1.tglTradingMarket.ForeColor = &HFFFFFF
+    Else
+        isMarketToggled = True
+        UserForm1.tglTradingMarket.BackStyle = fmBackStyleOpaque
+        UserForm1.tglTradingMarket.ForeColor = &H0&
+    End If
+    
+    
+End Sub
+
+Private Sub tglTradingMomentumBot_Click()
+    If isMomentumToggled Then
+        isMomentumToggled = False
+        UserForm1.tglTradingMomentumBot.BackStyle = fmBackStyleTransparent
+        UserForm1.tglTradingMomentumBot.ForeColor = &HFFFFFF
+    Else
+        isMomentumToggled = True
+        UserForm1.tglTradingMomentumBot.BackStyle = fmBackStyleOpaque
+        UserForm1.tglTradingMomentumBot.ForeColor = &H0&
+    End If
+End Sub
+
+Private Sub tglTradingMRBot_Click()
+    If isMRToggled Then
+        isMRToggled = False
+        UserForm1.tglTradingMRBot.BackStyle = fmBackStyleTransparent
+        UserForm1.tglTradingMRBot.ForeColor = &HFFFFFF
+    Else
+        isMRToggled = True
+        UserForm1.tglTradingMRBot.BackStyle = fmBackStyleOpaque
+        UserForm1.tglTradingMRBot.ForeColor = &H0&
+    End If
+End Sub
+
+Private Sub tglTradingRandomBot_Click()
+    If isRandomToggled Then
+        isRandomToggled = False
+        UserForm1.tglTradingRandomBot.BackStyle = fmBackStyleTransparent
+        UserForm1.tglTradingRandomBot.ForeColor = &HFFFFFF
+    Else
+        isRandomToggled = True
+        UserForm1.tglTradingRandomBot.BackStyle = fmBackStyleOpaque
+        UserForm1.tglTradingRandomBot.ForeColor = &H0&
+    End If
+End Sub
+
+Private Sub tglTradingSL_Click()
+    If isSLToggled Then
+        isSLToggled = False
+        UserForm1.tglTradingSL.BackStyle = fmBackStyleTransparent
+        UserForm1.tglTradingSL.ForeColor = &HFFFFFF
+    Else
+        isSLToggled = True
+        UserForm1.tglTradingSL.BackStyle = fmBackStyleOpaque
+        UserForm1.tglTradingSL.ForeColor = &H0&
+    End If
 End Sub
 
 Sub UserForm_Activate()

@@ -13,6 +13,8 @@ Private p_k As Double
 Private p_X_train As Variant
 Private p_y_train As Variant
 Private p_predictions() As Double
+Private p_knn() As Variant
+Private p_most As Integer
 
 
 Public Sub InitiateProperties(k As Integer)
@@ -36,7 +38,6 @@ Public Property Let X_train(ByVal new_X_train As Variant)
     p_X_train = new_X_train
 End Property
 
-
 Public Property Get y_train() As Variant
     y_train = p_y_train
 End Property
@@ -45,14 +46,12 @@ Public Property Let y_train(ByVal new_y_train As Variant)
     p_y_train = new_y_train
 End Property
 
-
-Public Sub fit(X As Variant, y As Variant)
+Public Sub fit(X As Variant, Y As Variant)
     p_X_train = X
-    p_y_train = y
+    p_y_train = Y
 End Sub
 
 Public Function predict(X() As Variant) As Integer
-
 
     Dim i As Integer
     Dim indices() As Long
@@ -60,7 +59,6 @@ Public Function predict(X() As Variant) As Integer
     lenx = UBound(X)
     Dim distances() As Double
     ReDim Preserve distances(0 To UBound(p_X_train))
-    Debug.Print "1.3"
     For i = 0 To UBound(p_X_train)
         distances(i) = euclidianDistance(X, p_X_train(i))
     Next i
@@ -74,22 +72,26 @@ Public Function predict(X() As Variant) As Integer
     indices = GetNSmallestIndices(distances, k)
     Dim nearest_labels() As Integer
     ReDim Preserve nearest_labels(0 To k - 1)
+    ReDim Preserve p_knn(0 To k - 1)
     ' Print the indices
     For i = LBound(indices) To UBound(indices)
         'Debug.Print (LBound(indices) & " " & UBound(indices))
         'Debug.Print ("The label of " & indices(i) & " is " & p_y_train(indices(i)))
         nearest_labels(i) = p_y_train(indices(i))
+        p_knn(i) = p_y_train(indices(i))
     Next i
     
     
 '   Dim item As Variant
 '   For Each item In nearest_labels
-'      Debug.Print item
+'      Debug.Print "nearests ::: " & item
 '   Next item
    
    Dim most_common As Integer
    most_common = GetMostCommonValue(nearest_labels)
+   p_most = GetMostCommonValue(nearest_labels)
    'Debug.Print ("Most common is " & most_common)
+
    
    predict = most_common
 
@@ -212,3 +214,15 @@ Sub TestGetMostCommonValue()
     Debug.Print most_common_value
 End Sub
 
+
+Public Property Get knn() As Variant
+    knn = p_knn
+End Property
+
+Public Property Get most() As Variant
+    most = p_most
+End Property
+
+Public Property Let most(ByVal newMost As Variant)
+    p_most = newMost
+End Property

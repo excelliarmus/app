@@ -14,12 +14,12 @@ Function placeMarketOrder(APIkey As String, secret_key As String, side As String
     On Error GoTo error
     If side = "BUY" Then
         signature = ModBinanceRequests.getSignature("recvWindow=59999&symbol=" & ticker & "&side=BUY&type=MARKET&quantity=" & qt & "&timestamp=" & timestamp, secret_key)
-        Url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=BUY&type=MARKET&quantity=" & qt & "&timestamp=" & timestamp & "&signature=" & signature
+        url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=BUY&type=MARKET&quantity=" & qt & "&timestamp=" & timestamp & "&signature=" & signature
     Else
         signature = ModBinanceRequests.getSignature("recvWindow=59999&symbol=" & ticker & "&side=SELL&type=MARKET&quantity=" & qt & "&timestamp=" & timestamp, secret_key)
-        Url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=SELL&type=MARKET&quantity=" & qt & "&timestamp=" & timestamp & "&signature=" & signature
+        url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=SELL&type=MARKET&quantity=" & qt & "&timestamp=" & timestamp & "&signature=" & signature
     End If
-    xmlhttp.Open "POST", Url, False
+    xmlhttp.Open "POST", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -32,7 +32,7 @@ Function placeMarketOrder(APIkey As String, secret_key As String, side As String
     End If
     
     
-Done:
+done:
     Exit Function
 error:
         MsgBox "An error occured : " & xmlhttp.responseText
@@ -48,12 +48,12 @@ Function placeLimitOrder(APIkey As String, secret_key As String, side As String,
     On Error GoTo error
     If side = "BUY" Then
         signature = ModBinanceRequests.getSignature("recvWindow=59999&symbol=" & ticker & "&side=BUY&type=LIMIT&quantity=" & qt & "&price=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp, secret_key)
-        Url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=BUY&type=LIMIT&quantity=" & qt & "&price=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
+        url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=BUY&type=LIMIT&quantity=" & qt & "&price=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
     Else
         signature = ModBinanceRequests.getSignature("recvWindow=59999&symbol=" & ticker & "&side=SELL&type=LIMIT&quantity=" & qt & "&price=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp, secret_key)
-        Url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=SELL&type=LIMIT&quantity=" & qt & "&price=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
+        url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=SELL&type=LIMIT&quantity=" & qt & "&price=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
     End If
-    xmlhttp.Open "POST", Url, False
+    xmlhttp.Open "POST", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -66,7 +66,7 @@ Function placeLimitOrder(APIkey As String, secret_key As String, side As String,
     End If
     
     
-Done:
+done:
     Exit Function
 error:
         MsgBox "An error occured : " & xmlhttp.responseText
@@ -82,12 +82,12 @@ Function placeSLOrder(APIkey As String, secret_key As String, side As String, ti
     On Error GoTo error
     If side = "BUY" Then
         signature = ModBinanceRequests.getSignature("recvWindow=59999&symbol=" & ticker & "&side=BUY&type=STOP_LOSS_LIMIT&quantity=" & qt & "&price=" & limit_price & "&stopPrice=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp, secret_key)
-        Url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=BUY&type=STOP_LOSS_LIMIT&quantity=" & qt & "&price=" & limit_price & "&stopPrice=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
+        url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=BUY&type=STOP_LOSS_LIMIT&quantity=" & qt & "&price=" & limit_price & "&stopPrice=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
     Else
         signature = ModBinanceRequests.getSignature("recvWindow=59999&symbol=" & ticker & "&side=SELL&type=STOP_LOSS_LIMIT&quantity=" & qt & "&price=" & limit_price & "&stopPrice=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp, secret_key)
-        Url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=SELL&type=STOP_LOSS_LIMIT&quantity=" & qt & "&price=" & limit_price & "&stopPrice=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
+        url = "https://testnet.binance.vision/api/v3/order?recvWindow=59999&symbol=" & ticker & "&side=SELL&type=STOP_LOSS_LIMIT&quantity=" & qt & "&price=" & limit_price & "&stopPrice=" & limit_price & "&timeInForce=GTC&timestamp=" & timestamp & "&signature=" & signature
     End If
-    xmlhttp.Open "POST", Url, False
+    xmlhttp.Open "POST", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -100,7 +100,7 @@ Function placeSLOrder(APIkey As String, secret_key As String, side As String, ti
     End If
     
     
-Done:
+done:
     Exit Function
 error:
         MsgBox "An error occured : " & xmlhttp.responseText
@@ -391,8 +391,8 @@ Sub runMRBot()
 
 
 
-Url = "https://api.binance.com/api/v3/klines?symbol=" & ticker & "&interval=1m&limit=5"
-xmlhttp.Open "GET", Url, False
+url = "https://api.binance.com/api/v3/klines?symbol=" & ticker & "&interval=1m&limit=5"
+xmlhttp.Open "GET", url, False
 xmlhttp.Send
 Set json = JsonConverter.ParseJson(xmlhttp.responseText)
 
@@ -423,7 +423,7 @@ For i = 1 To 5
     closeArray(i) = CDbl(Replace(json(i)(5), ".", ","))
 Next
 
-average = Application.WorksheetFunction.Sum(closeArray) / 5
+average = Application.WorksheetFunction.sum(closeArray) / 5
 current_price = ModData.getCurrentPrice(ticker)
 upLimit = average + (average * (1 + margin))
 downLimit = average + (average * (1 - margin))
@@ -477,8 +477,8 @@ Sub runMomentumBot()
     margin = CDbl(Replace(UserForm1.inputTradingMargin, ".", ","))
 
 'On Error GoTo noticker
-Url = "https://api.binance.com/api/v3/klines?symbol=" & ticker & "&interval=1m&limit=5"
-xmlhttp.Open "GET", Url, False
+url = "https://api.binance.com/api/v3/klines?symbol=" & ticker & "&interval=1m&limit=5"
+xmlhttp.Open "GET", url, False
 xmlhttp.Send
 Set json = JsonConverter.ParseJson(xmlhttp.responseText)
 Dim i As Integer
@@ -488,7 +488,7 @@ For i = 1 To 5
     closeArray(i) = CDbl(Replace(json(i)(5), ".", ","))
 Next
 
-average = Application.WorksheetFunction.Sum(closeArray) / 5
+average = Application.WorksheetFunction.sum(closeArray) / 5
 current_price = ModData.getCurrentPrice(ticker)
 upLimit = average + (average * (1 + margin))
 downLimit = average + (average * (1 - margin))
@@ -579,12 +579,14 @@ Sub getOpenOrders(APIkey As String, secret_key As String)
     Dim json As Object
     Dim ordersString As String
 
+    On Error GoTo error
+    
     
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
     
-    Url = "https://testnet.binance.vision/api/v3/openOrders?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
-    xmlhttp.Open "GET", Url, False
+    url = "https://testnet.binance.vision/api/v3/openOrders?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     
@@ -616,20 +618,27 @@ Sub getOpenOrders(APIkey As String, secret_key As String)
 '    ]
     'frmOpenOrders.lblOpenOrders.Caption = xmlhttp.responseText
     'MsgBox xmlhttp.responseText
-        For Each Item In json
+        For Each item In json
             ordersString = ordersString & ChrW(8658) & " "
-            For Each Child In Item
-                ordersString = ordersString & "[ " & Child & " : " & Item(Child) & " ] "
+            For Each Child In item
+                ordersString = ordersString & "[ " & Child & " : " & item(Child) & " ] "
                 ' Debug.Print Child & " : " & Item(Child) & vbNewLine & "Line2"
             Next Child
             ordersString = ordersString & vbNewLine & vbNewLine
-        Next Item
+        Next item
     'Debug.Print ordersString
     frmOpenOrders.lblOpenOrders.Text = ordersString
+    
+done:
+    Exit Sub
+error:
+        MsgBox "An error occured : " & xmlhttp.responseText
 End Sub
 
 
 Sub getAllOrders(APIkey As String, secret_key As String)
+    On Error GoTo error
+
     Dim xmlhttp As Object
     Dim timestamp As Double
     Dim signature As String
@@ -638,18 +647,23 @@ Sub getAllOrders(APIkey As String, secret_key As String)
     Dim ordersString As String
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
-    Url = "https://testnet.binance.vision/api/v3/openOrders?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
-    xmlhttp.Open "GET", Url, False
+    url = "https://testnet.binance.vision/api/v3/openOrders?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
-        For Each Item In json
+        For Each item In json
             ordersString = ordersString & ChrW(8658) & " "
-            For Each Child In Item
-                ordersString = ordersString & "[ " & Child & " : " & Item(Child) & " ] "
+            For Each Child In item
+                ordersString = ordersString & "[ " & Child & " : " & item(Child) & " ] "
             Next Child
             ordersString = ordersString & vbNewLine & vbNewLine
-        Next Item
+        Next item
     frmAllOrders.lblAllOrders.Text = ordersString
+    
+done:
+    Exit Sub
+error:
+        MsgBox "An error occured : " & xmlhttp.responseText
 End Sub

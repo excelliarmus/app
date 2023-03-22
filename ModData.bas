@@ -35,8 +35,8 @@ On Error GoTo noticker
 
 
 
-Url = "https://api.binance.com/api/v3/klines?symbol=" & ticker & "&interval=1m&limit=100"
-xmlhttp.Open "GET", Url, False
+url = "https://api.binance.com/api/v3/klines?symbol=" & ticker & "&interval=1m&limit=100"
+xmlhttp.Open "GET", url, False
 xmlhttp.Send
 
 Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -101,7 +101,7 @@ Next
 'Debug.Print OHLCclose
 
 
-Done:  Exit Sub
+done:  Exit Sub
 
 noticker:
     isDataStream1On = False
@@ -138,7 +138,7 @@ End With
 
 
 ActiveChart.Export ThisWorkbook.Path & "\chart.jpg"
-f = ActiveSheet.Name
+f = ActiveSheet.name
 Sheets(f).Select
 ActiveWindow.SelectedSheets.Visible = False
 
@@ -204,7 +204,7 @@ End With
 
 
 ActiveChart.Export ThisWorkbook.Path & "\chart2.jpg"
-f = ActiveSheet.Name
+f = ActiveSheet.name
 Sheets(f).Select
 ActiveWindow.SelectedSheets.Visible = False
 
@@ -252,14 +252,14 @@ Dim newPrice As Double
 
 On Error GoTo noticker
 
-Url = "https://api.binance.com/api/v3/ticker/price?symbol=" & symbol
-xmlhttp.Open "GET", Url, False
+url = "https://api.binance.com/api/v3/ticker/price?symbol=" & symbol
+xmlhttp.Open "GET", url, False
 xmlhttp.Send
 
 Set json = JsonConverter.ParseJson(xmlhttp.responseText)
 getCurrentPrice = CDbl(Replace(json("price"), ".", ","))
 
-Done:  Exit Function
+done:  Exit Function
 
 noticker:
     isDataStream2On = False
@@ -278,8 +278,8 @@ Dim json As Object
 
 On Error GoTo noticker
 
-Url = "https://api.binance.com/api/v3/depth?limit=13&symbol=" & symbol
-xmlhttp.Open "GET", Url, False
+url = "https://api.binance.com/api/v3/depth?limit=13&symbol=" & symbol
+xmlhttp.Open "GET", url, False
 xmlhttp.Send
 
 
@@ -314,7 +314,7 @@ UserForm1.lblDataBid12.Caption = json("bids")(12)(1)
 UserForm1.lblDataBid13.Caption = json("bids")(13)(1)
 
 
-Done:  Exit Sub
+done:  Exit Sub
 
 noticker:
     MsgBox "This trading pair '" & symbol & "' is not supported on Binance."
@@ -329,8 +329,8 @@ Dim json As Object
 
 On Error GoTo noticker
 
-Url = "https://api.binance.com/api/v3/depth?limit=13&symbol=" & symbol
-xmlhttp.Open "GET", Url, False
+url = "https://api.binance.com/api/v3/depth?limit=13&symbol=" & symbol
+xmlhttp.Open "GET", url, False
 xmlhttp.Send
 
 
@@ -365,7 +365,7 @@ UserForm1.lblData2Bid12.Caption = json("bids")(12)(1)
 UserForm1.lblData2Bid13.Caption = json("bids")(13)(1)
 
 
-Done:  Exit Sub
+done:  Exit Sub
 
 noticker:
     MsgBox "This trading pair '" & symbol & "' is not supported on Binance."

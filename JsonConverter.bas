@@ -482,9 +482,9 @@ Private Function json_ParseObject(json_String As String, ByRef json_Index As Lon
             json_Key = json_ParseKey(json_String, json_Index)
             json_NextChar = json_Peek(json_String, json_Index)
             If json_NextChar = "[" Or json_NextChar = "{" Then
-                Set json_ParseObject.Item(json_Key) = json_ParseValue(json_String, json_Index)
+                Set json_ParseObject.item(json_Key) = json_ParseValue(json_String, json_Index)
             Else
-                json_ParseObject.Item(json_Key) = json_ParseValue(json_String, json_Index)
+                json_ParseObject.item(json_Key) = json_ParseValue(json_String, json_Index)
             End If
         Loop
     End If
@@ -908,7 +908,7 @@ Public Function ParseUtc(utc_UtcDate As Date) As Date
     Exit Function
 
 utc_ErrorHandling:
-    Err.Raise 10011, "UtcConverter.ParseUtc", "UTC parsing error: " & Err.Number & " - " & Err.Description
+    Err.Raise 10011, "UtcConverter.ParseUtc", "UTC parsing error: " & Err.number & " - " & Err.Description
 End Function
 
 ''
@@ -937,7 +937,7 @@ Public Function ConvertToUtc(utc_LocalDate As Date) As Date
     Exit Function
 
 utc_ErrorHandling:
-    Err.Raise 10012, "UtcConverter.ConvertToUtc", "UTC conversion error: " & Err.Number & " - " & Err.Description
+    Err.Raise 10012, "UtcConverter.ConvertToUtc", "UTC conversion error: " & Err.number & " - " & Err.Description
 End Function
 
 ''
@@ -1015,7 +1015,7 @@ Public Function ParseIso(utc_IsoString As String) As Date
     Exit Function
 
 utc_ErrorHandling:
-    Err.Raise 10013, "UtcConverter.ParseIso", "ISO 8601 parsing error for " & utc_IsoString & ": " & Err.Number & " - " & Err.Description
+    Err.Raise 10013, "UtcConverter.ParseIso", "ISO 8601 parsing error for " & utc_IsoString & ": " & Err.number & " - " & Err.Description
 End Function
 
 ''
@@ -1034,7 +1034,7 @@ Public Function ConvertToIso(utc_LocalDate As Date) As String
     Exit Function
 
 utc_ErrorHandling:
-    Err.Raise 10014, "UtcConverter.ConvertToIso", "ISO 8601 conversion error: " & Err.Number & " - " & Err.Description
+    Err.Raise 10014, "UtcConverter.ConvertToIso", "ISO 8601 conversion error: " & Err.number & " - " & Err.Description
 End Function
 
 ' ============================================= '

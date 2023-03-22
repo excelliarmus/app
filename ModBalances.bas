@@ -162,6 +162,31 @@ Function get_isGlobalStream1On()
 
 End Function
 
+Public Function checkKeys(APIkey As String, secret_key As String)
+    Dim xmlhttp As Object
+    Dim timestamp As Double
+    Dim signature As String
+    Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+    Dim json As Object
+    timestamp = ModBinanceRequests.getTimeStampForBinance
+    signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
+    url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
+    xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
+    xmlhttp.Send
+    Set json = JsonConverter.ParseJson(xmlhttp.responseText)
+
+    Dim bnb As String
+    On Error GoTo error
+    bnb = json("balances")(1)("free")
+error:
+    checkKeys = "error"
+    If bnb <> "" Then
+        checkKeys = "ok"
+    End If
+        
+
+End Function
 Sub UpdateBalances(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -172,8 +197,8 @@ Sub UpdateBalances(APIkey As String, secret_key As String)
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
     
-    Url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
-    xmlhttp.Open "GET", Url, False
+    url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     
@@ -294,7 +319,7 @@ Sub UpdateBalances(APIkey As String, secret_key As String)
     'UserForm1.lblBalancesXRP.Caption = json("balances")(8)("free")
     UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
     
-Done:
+done:
     Exit Sub
     
 error_apikey:
@@ -332,8 +357,8 @@ Sub UpdateBNB(APIkey As String, secret_key As String)
     Dim json As Object
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
-    Url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
-    xmlhttp.Open "GET", Url, False
+    url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -343,10 +368,10 @@ Sub UpdateBNB(APIkey As String, secret_key As String)
     UserForm1.lblBalancesBNB.Caption = bnb
     UserForm1.lblBalancesBNBtoUSD = Replace(getToUSD("BNBUSDT", CDbl(Replace(bnb, ".", ","))), ",", ".")
     UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
-Done:
+done:
     Exit Sub
 error_apikey:
-        isBNBStreamOn = False
+        powerOffBNBStream
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -358,8 +383,8 @@ Sub UpdateBTC(APIkey As String, secret_key As String)
     Dim json As Object
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
-    Url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
-    xmlhttp.Open "GET", Url, False
+    url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -369,10 +394,10 @@ Sub UpdateBTC(APIkey As String, secret_key As String)
     UserForm1.lblBalancesBTC.Caption = btc
     UserForm1.lblBalancesBTCtoUSD = Replace(getToUSD("BTCUSDT", CDbl(Replace(btc, ".", ","))), ",", ".")
     UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
-Done:
+done:
     Exit Sub
 error_apikey:
-        isBTCStreamOn = False
+        powerOffBTCStream
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -384,8 +409,8 @@ Sub UpdateBUSD(APIkey As String, secret_key As String)
     Dim json As Object
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
-    Url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
-    xmlhttp.Open "GET", Url, False
+    url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -395,10 +420,10 @@ Sub UpdateBUSD(APIkey As String, secret_key As String)
     UserForm1.lblBalancesBUSD.Caption = busd
     UserForm1.lblBalancesBUSDtoUSD = Replace(getToUSD("BUSDUSDT", CDbl(Replace(busd, ".", ","))), ",", ".")
     UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
-Done:
+done:
     Exit Sub
 error_apikey:
-        isBUSDStreamOn = False
+        powerOffBUSDStream
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -410,8 +435,8 @@ Sub UpdateETH(APIkey As String, secret_key As String)
     Dim json As Object
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
-    Url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
-    xmlhttp.Open "GET", Url, False
+    url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -421,10 +446,10 @@ Sub UpdateETH(APIkey As String, secret_key As String)
     UserForm1.lblBalancesETH.Caption = eth
     UserForm1.lblBalancesETHtoUSD = Replace(getToUSD("ETHUSDT", CDbl(Replace(eth, ".", ","))), ",", ".")
     UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
-Done:
+done:
     Exit Sub
 error_apikey:
-        isETHStreamOn = False
+        powerOffETHStream
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -436,8 +461,8 @@ Sub UpdateLTC(APIkey As String, secret_key As String)
     Dim json As Object
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
-    Url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
-    xmlhttp.Open "GET", Url, False
+    url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -447,10 +472,10 @@ Sub UpdateLTC(APIkey As String, secret_key As String)
     UserForm1.lblBalancesLTC.Caption = ltc
     UserForm1.lblBalancesLTCtoUSD = Replace(getToUSD("LTCUSDT", CDbl(Replace(ltc, ".", ","))), ",", ".")
     UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
-Done:
+done:
     Exit Sub
 error_apikey:
-        isLTCStreamOn = False
+        powerOffLTCStream
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -462,8 +487,8 @@ Sub UpdateTRX(APIkey As String, secret_key As String)
     Dim json As Object
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
-    Url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
-    xmlhttp.Open "GET", Url, False
+    url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -473,10 +498,10 @@ Sub UpdateTRX(APIkey As String, secret_key As String)
     UserForm1.lblBalancesTRX.Caption = trx
     UserForm1.lblBalancesTRXtoUSD = Replace(getToUSD("TRXUSDT", CDbl(Replace(trx, ".", ","))), ",", ".")
     UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
-Done:
+done:
     Exit Sub
 error_apikey:
-        isTRXStreamOn = False
+        powerOffTRXStream
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -488,8 +513,8 @@ Sub UpdateUSDT(APIkey As String, secret_key As String)
     Dim json As Object
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
-    Url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
-    xmlhttp.Open "GET", Url, False
+    url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -498,10 +523,10 @@ Sub UpdateUSDT(APIkey As String, secret_key As String)
     usdt = json("balances")(7)("free")
     UserForm1.lblBalancesUSDT.Caption = usdt
     UserForm1.lblBalancesUSDTtoUSD = Replace(CDbl(Replace(usdt, ".", ",")) * 0.989, ",", ".")
-Done:
+done:
     Exit Sub
 error_apikey:
-        isUSDTStreamOn = False
+        powerOffUSDTStream
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
@@ -513,8 +538,8 @@ Sub UpdateXRP(APIkey As String, secret_key As String)
     Dim json As Object
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
-    Url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
-    xmlhttp.Open "GET", Url, False
+    url = "https://testnet.binance.vision/api/v3/account?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
+    xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
@@ -524,9 +549,9 @@ Sub UpdateXRP(APIkey As String, secret_key As String)
     UserForm1.lblBalancesXRP.Caption = xrp
     UserForm1.lblBalancesXRPtoUSD = Replace(getToUSD("XRPUSDT", CDbl(Replace(xrp, ".", ","))), ",", ".")
     UserForm1.lblBalancesOverall.Caption = getOverallBalanceUSD()
-Done:
+done:
     Exit Sub
 error_apikey:
-        isXRPStreamOn = False
+        powerOffXRPStream
         MsgBox "API Key / Secret Key invalid."
 End Sub

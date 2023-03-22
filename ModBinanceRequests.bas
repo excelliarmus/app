@@ -16,7 +16,7 @@ Public Function Hex_HMACSHA256(ByVal sTextToHash As String, ByVal sSharedSecretK
 
     TextToHash = asc.Getbytes_4(sTextToHash)
     SharedSecretKey = asc.Getbytes_4(sSharedSecretKey)
-    enc.Key = SharedSecretKey
+    enc.key = SharedSecretKey
 
     Dim bytes() As Byte
     bytes = enc.ComputeHash_2((TextToHash))
