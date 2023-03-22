@@ -3,6 +3,8 @@
 
 ![](https://i.ibb.co/3kvvLLJ/Excelliarmus.jpg)
 
+> Please read the docs before using Excelliarmus : https://excelliarmus.gitbook.io/docs/
+
 ## What is Excelliarmus ?
 Excelliarmus is an open-source trading software, currently under development, that will allow semi-automated trading of financial assets, first crypto-currencies, as the data is easier to access, then other assets maybe. The technical constraint is that the project will be coded in VBA.
 
