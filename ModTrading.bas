@@ -6,7 +6,7 @@ Public isMomentumBotOn As Boolean
 
 Function placeMarketOrder(APIkey As String, secret_key As String, side As String, ticker As String, qt As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
@@ -40,7 +40,7 @@ End Function
 
 Function placeLimitOrder(APIkey As String, secret_key As String, side As String, ticker As String, qt As String, limit_price As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
@@ -74,7 +74,7 @@ End Function
 
 Function placeSLOrder(APIkey As String, secret_key As String, side As String, ticker As String, qt As String, limit_price As String)
     Dim xmlhttp As Object
-    Dim timestamp As LongLong
+    Dim timestamp As Double
     Dim signature As String
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object

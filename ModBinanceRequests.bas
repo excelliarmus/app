@@ -57,19 +57,35 @@ Private Function ByteArrayToHex(ByRef ByteArray() As Byte) As String
 End Function
 
 Function getTimeStampForBinance()
-    Dim timestamp_string As String
-    Dim timestamp_vba As Double
-    Dim timestamp_real As Double
-    Dim timestamp_binance As Double
+
+
+'    Tout ça n'a servi à rien, je ne savais pas
+'    qu 'on pouvait directement avoir le server time
+'    de binance
+
+'    Dim timestamp_string As String
+'    Dim timestamp_vba As Double
+'    Dim timestamp_real As Double
+'    Dim timestamp_binance As Double
+'
+'    timestamp_string = Split((DateDiff("s", "01/01/1970", Date) + Timer) * 1000, ",")(0)
+'    'MsgBox timestamp_string
+'    timestamp_vba = CDbl(timestamp_string)
+'    ' VBA's ts is 3594104 ahead
+'    timestamp_real = timestamp_vba - 3594104
+'    timestamp_binance = timestamp_real - 70000 '50000 sur les PC de la FAC
+'
     
-    timestamp_string = Split((DateDiff("s", "01/01/1970", Date) + Timer) * 1000, ",")(0)
-    'MsgBox timestamp_string
-    timestamp_vba = CDbl(timestamp_string)
-    ' VBA's ts is 3594104 ahead
-    timestamp_real = timestamp_vba - 3594104
-    timestamp_binance = timestamp_real - 70000 '50000 sur les PC de la FAC
     
-    getTimeStampForBinance = timestamp_binance
+    Dim xmlhttp As Object
+    Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
+    Dim json As Object
+    url = "https://testnet.binance.vision/api/v3/exchangeInfo"
+    xmlhttp.Open "GET", url, False
+    xmlhttp.Send
+    Set json = JsonConverter.ParseJson(xmlhttp.responseText)
+    
+    getTimeStampForBinance = json("serverTime")
 
 End Function
 
