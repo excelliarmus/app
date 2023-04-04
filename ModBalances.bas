@@ -1,6 +1,6 @@
 Attribute VB_Name = "ModBalances"
+' Booleans to check if stream is ON or OFF
 Public isBalancesGlobalStreamOn As Boolean
-
 Public isBNBStreamOn As Boolean
 Public isBTCStreamOn As Boolean
 Public isBUSDStreamOn As Boolean
@@ -10,158 +10,156 @@ Public isTRXStreamOn As Boolean
 Public isUSDTStreamOn As Boolean
 Public isXRPStreamOn As Boolean
 
+' sub to power ON the global stream (updates the boolean and front-end)
 Sub powerOnGlobalStream()
     isBalancesGlobalStreamOn = True
     UserForm1.lblBalancesStatus.BorderColor = &HFF00&
     UserForm1.lblBalancesStatus.Caption = "ON"
     UserForm1.lblBalancesStatus.ForeColor = &HFF00&
-
 End Sub
 
+' sub to power OFF the global stream (updates the boolean and front-end)
 Sub powerOffGlobalStream()
     isBalancesGlobalStreamOn = False
     UserForm1.lblBalancesStatus.BorderColor = &HFF&
     UserForm1.lblBalancesStatus.Caption = "OFF"
     UserForm1.lblBalancesStatus.ForeColor = &HFF&
-
 End Sub
 
+' sub to power ON the BNB stream (updates the boolean and front-end)
 Sub powerOnBNBStream()
     isBNBStreamOn = True
     UserForm1.lblBalancesBNBStatus.BorderColor = &HFF00&
     UserForm1.lblBalancesBNBStatus.Caption = "ON"
     UserForm1.lblBalancesBNBStatus.ForeColor = &HFF00&
-
 End Sub
 
+' sub to power OFF the BNB stream (updates the boolean and front-end)
 Sub powerOffBNBStream()
     isBNBStreamOn = False
     UserForm1.lblBalancesBNBStatus.BorderColor = &HFF&
     UserForm1.lblBalancesBNBStatus.Caption = "OFF"
     UserForm1.lblBalancesBNBStatus.ForeColor = &HFF&
-
 End Sub
 
-
+' sub to power ON the BTC stream (updates the boolean and front-end)
 Sub powerOnBTCStream()
     isBTCStreamOn = True
     UserForm1.lblBalancesBTCStatus.BorderColor = &HFF00&
     UserForm1.lblBalancesBTCStatus.Caption = "ON"
     UserForm1.lblBalancesBTCStatus.ForeColor = &HFF00&
-
 End Sub
 
+' sub to power OFF the BTC stream (updates the boolean and front-end)
 Sub powerOffBTCStream()
     isBTCStreamOn = False
     UserForm1.lblBalancesBTCStatus.BorderColor = &HFF&
     UserForm1.lblBalancesBTCStatus.Caption = "OFF"
     UserForm1.lblBalancesBTCStatus.ForeColor = &HFF&
-
 End Sub
 
+' sub to power ON the BUSD stream (updates the boolean and front-end)
 Sub powerOnBUSDStream()
     isBUSDStreamOn = True
     UserForm1.lblBalancesBUSDStatus.BorderColor = &HFF00&
     UserForm1.lblBalancesBUSDStatus.Caption = "ON"
     UserForm1.lblBalancesBUSDStatus.ForeColor = &HFF00&
-
 End Sub
 
+' sub to power OFF the BUSD stream (updates the boolean and front-end)
 Sub powerOffBUSDStream()
     isBUSDStreamOn = False
     UserForm1.lblBalancesBUSDStatus.BorderColor = &HFF&
     UserForm1.lblBalancesBUSDStatus.Caption = "OFF"
     UserForm1.lblBalancesBUSDStatus.ForeColor = &HFF&
-
 End Sub
 
+' sub to power ON the ETH stream (updates the boolean and front-end)
 Sub powerOnETHStream()
     isETHStreamOn = True
     UserForm1.lblBalancesETHStatus.BorderColor = &HFF00&
     UserForm1.lblBalancesETHStatus.Caption = "ON"
     UserForm1.lblBalancesETHStatus.ForeColor = &HFF00&
-
 End Sub
 
+' sub to power OFF the ETH stream (updates the boolean and front-end)
 Sub powerOffETHStream()
     isETHStreamOn = False
     UserForm1.lblBalancesETHStatus.BorderColor = &HFF&
     UserForm1.lblBalancesETHStatus.Caption = "OFF"
     UserForm1.lblBalancesETHStatus.ForeColor = &HFF&
-
 End Sub
 
-
+' sub to power ON the LTC stream (updates the boolean and front-end)
 Sub powerOnLTCStream()
     isLTCStreamOn = True
     UserForm1.lblBalancesLTCStatus.BorderColor = &HFF00&
     UserForm1.lblBalancesLTCStatus.Caption = "ON"
     UserForm1.lblBalancesLTCStatus.ForeColor = &HFF00&
-
 End Sub
 
+' sub to power OFF the LTC stream (updates the boolean and front-end)
 Sub powerOffLTCStream()
     isLTCStreamOn = False
     UserForm1.lblBalancesLTCStatus.BorderColor = &HFF&
     UserForm1.lblBalancesLTCStatus.Caption = "OFF"
     UserForm1.lblBalancesLTCStatus.ForeColor = &HFF&
-
 End Sub
 
+' sub to power ON the TRX stream (updates the boolean and front-end)
 Sub powerOnTRXStream()
     isTRXStreamOn = True
     UserForm1.lblBalancesTRXStatus.BorderColor = &HFF00&
     UserForm1.lblBalancesTRXStatus.Caption = "ON"
     UserForm1.lblBalancesTRXStatus.ForeColor = &HFF00&
-
 End Sub
 
+' sub to power OFF the TRX stream (updates the boolean and front-end)
 Sub powerOffTRXStream()
     isTRXStreamOn = False
     UserForm1.lblBalancesTRXStatus.BorderColor = &HFF&
     UserForm1.lblBalancesTRXStatus.Caption = "OFF"
     UserForm1.lblBalancesTRXStatus.ForeColor = &HFF&
-
 End Sub
 
+' sub to power ON the USDT stream (updates the boolean and front-end)
 Sub powerOnUSDTStream()
     isUSDTStreamOn = True
     UserForm1.lblBalancesUSDTStatus.BorderColor = &HFF00&
     UserForm1.lblBalancesUSDTStatus.Caption = "ON"
     UserForm1.lblBalancesUSDTStatus.ForeColor = &HFF00&
-
 End Sub
 
+' sub to power OFF the USDT stream (updates the boolean and front-end)
 Sub powerOffUSDTStream()
     isUSDTStreamOn = False
     UserForm1.lblBalancesUSDTStatus.BorderColor = &HFF&
     UserForm1.lblBalancesUSDTStatus.Caption = "OFF"
     UserForm1.lblBalancesUSDTStatus.ForeColor = &HFF&
-
 End Sub
 
+' sub to power ON the XRP stream (updates the boolean and front-end)
 Sub powerOnXRPStream()
     isXRPStreamOn = True
     UserForm1.lblBalancesXRPStatus.BorderColor = &HFF00&
     UserForm1.lblBalancesXRPStatus.Caption = "ON"
     UserForm1.lblBalancesXRPStatus.ForeColor = &HFF00&
-
 End Sub
 
+' sub to power OFF the XRP stream (updates the boolean and front-end)
 Sub powerOffXRPStream()
     isXRPStreamOn = False
     UserForm1.lblBalancesXRPStatus.BorderColor = &HFF&
     UserForm1.lblBalancesXRPStatus.Caption = "OFF"
     UserForm1.lblBalancesXRPStatus.ForeColor = &HFF&
-
 End Sub
 
+' function returns if Global Stream Boolean is True or False
 Function get_isGlobalStream1On()
-
     get_isGlobalStream1On = isBalancesGlobalStreamOn
-
 End Function
 
+' functions returns "ok" if API keys are valid
 Public Function checkKeys(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -175,7 +173,6 @@ Public Function checkKeys(APIkey As String, secret_key As String)
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
-
     Dim bnb As String
     On Error GoTo error
     bnb = json("balances")(1)("free")
@@ -184,9 +181,9 @@ error:
     If bnb <> "" Then
         checkKeys = "ok"
     End If
-        
-
 End Function
+
+' sub to update balances of each crypto and the overall USD balance
 Sub UpdateBalances(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -328,6 +325,7 @@ error_apikey:
 
 End Sub
 
+' function returns the sum of each crypto balance in USD equivalent
 Function getOverallBalanceUSD()
     Dim res
     res = CDbl(Replace(UserForm1.lblBalancesBNBtoUSD, ".", ",")) _
@@ -339,9 +337,9 @@ Function getOverallBalanceUSD()
     + CDbl(Replace(UserForm1.lblBalancesUSDTtoUSD, ".", ",")) _
     + CDbl(Replace(UserForm1.lblBalancesXRPtoUSD, ".", ","))
     getOverallBalanceUSD = Replace(res, ",", ".")
-
 End Function
 
+' function returns USD equivalent of a ticker and quantity
 Function getToUSD(ticker As String, quantity As Double)
     Dim res
     res = ModData.getCurrentPrice(ticker) * quantity * 0.989 ' 1 USD = 0.989 USDT
@@ -349,6 +347,7 @@ Function getToUSD(ticker As String, quantity As Double)
     getToUSD = res
 End Function
 
+' sub to update only BNB balance + USD equivalent (requires API key + secret key)
 Sub UpdateBNB(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -375,6 +374,7 @@ error_apikey:
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
+' sub to update only BTC balance + USD equivalent (requires API key + secret key)
 Sub UpdateBTC(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -401,6 +401,7 @@ error_apikey:
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
+' sub to update only BUSD balance + USD equivalent (requires API key + secret key)
 Sub UpdateBUSD(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -427,6 +428,7 @@ error_apikey:
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
+' sub to update only ETH balance + USD equivalent (requires API key + secret key)
 Sub UpdateETH(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -453,6 +455,7 @@ error_apikey:
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
+' sub to update only LTC balance + USD equivalent (requires API key + secret key)
 Sub UpdateLTC(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -479,6 +482,7 @@ error_apikey:
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
+' sub to update only TRX balance + USD equivalent (requires API key + secret key)
 Sub UpdateTRX(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -505,6 +509,7 @@ error_apikey:
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
+' sub to update only USDT balance + USD equivalent (requires API key + secret key)
 Sub UpdateUSDT(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -530,6 +535,7 @@ error_apikey:
         MsgBox "API Key / Secret Key invalid."
 End Sub
 
+' sub to update only XRP balance + USD equivalent (requires API key + secret key)
 Sub UpdateXRP(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double

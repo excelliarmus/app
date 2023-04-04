@@ -2,7 +2,7 @@ Attribute VB_Name = "ModDeleteAllCharts"
 'DO NOT DELETE THIS FILE !
 
 ' This code deletes all charts in the workbook
-' if, by error, a chart
+' as a chart
 ' is generated after each refresh...
 
 Sub deleteAll()

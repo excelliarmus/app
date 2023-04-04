@@ -13,12 +13,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+' sub to make the userform resizable
 Sub UserForm_Activate()
-
-Call ModMakeUserFormResizable.MakeFormResizable
-
+    Call ModMakeUserFormResizable.MakeFormResizable
 End Sub
 
+' sub to format info in the userform
 Private Sub UserForm_Initialize()
     With lblAllOrders
         .ScrollBars = fmScrollBarsVertical
@@ -26,6 +26,7 @@ Private Sub UserForm_Initialize()
     End With
 End Sub
 
+' sub to format info in the userform
 Private Sub lblOAllOrders_Exit(ByVal Cancel As MSForms.ReturnBoolean)
     With lblAllOrders
         .SelStart = 0

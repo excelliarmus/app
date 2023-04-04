@@ -1,9 +1,10 @@
 Attribute VB_Name = "ModTrading"
-Public logsArray(12) As String
-Public isRandomBotOn As Boolean
-Public isMRBotOn As Boolean
-Public isMomentumBotOn As Boolean
+Public logsArray(12) As String ' Array of logs
+Public isRandomBotOn As Boolean ' Boolean to check if random bot is ON
+Public isMRBotOn As Boolean ' Boolean to check if MR bot is ON
+Public isMomentumBotOn As Boolean ' Boolean to check if Momentum bot is ON
 
+' function returns if market order fired successfully (requires api keys, side, ticker and quantity)
 Function placeMarketOrder(APIkey As String, secret_key As String, side As String, ticker As String, qt As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -30,14 +31,13 @@ Function placeMarketOrder(APIkey As String, secret_key As String, side As String
     Else:
         placeMarketOrder = xmlhttp.responseText
     End If
-    
-    
 done:
     Exit Function
 error:
         MsgBox "An error occured : " & xmlhttp.responseText
 End Function
 
+' function returns if limit order fired successfully (requires api keys, side, ticker, quantity and limit price)
 Function placeLimitOrder(APIkey As String, secret_key As String, side As String, ticker As String, qt As String, limit_price As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -64,14 +64,13 @@ Function placeLimitOrder(APIkey As String, secret_key As String, side As String,
     Else:
         placeLimitOrder = xmlhttp.responseText
     End If
-    
-    
 done:
     Exit Function
 error:
         MsgBox "An error occured : " & xmlhttp.responseText
 End Function
 
+' function returns if Stop Loss order fired successfully (requires api keys, side, ticker, quantity and limit price)
 Function placeSLOrder(APIkey As String, secret_key As String, side As String, ticker As String, qt As String, limit_price As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -98,27 +97,22 @@ Function placeSLOrder(APIkey As String, secret_key As String, side As String, ti
     Else:
         placeSLOrder = xmlhttp.responseText
     End If
-    
-    
+
 done:
     Exit Function
 error:
         MsgBox "An error occured : " & xmlhttp.responseText
 End Function
 
+' sub to place to place an order (requires api keys and checks wich button -order type- is selected)
 Sub placeOrder(APIkey As String, secret_key As String)
     Dim ticker As String
     Dim qt As String
     Dim signal As String
     Dim limit_price As String
-    
-    
     ticker = UserForm1.inputTradingTicker
     qt = UserForm1.inputTradingQuantity
     limit_price = UserForm1.inputTradingLimitPrice
-    
-
-    
     If UserForm1.tglTradingMarket.Value = True Then
         If UserForm1.optTradingBuy.Value = True Then
             'BUY MARKET
@@ -173,13 +167,10 @@ Sub placeOrder(APIkey As String, secret_key As String)
                 addLog (signal)
             End If
         End If
-    
-    
     End If
-
-
 End Sub
 
+' sub to display logs in trading section
 Sub displayLogs()
     UserForm1.lblTradingLog1 = logsArray(0)
     If logsArray(0) Like "*BUY*" Then
@@ -311,6 +302,7 @@ Sub displayLogs()
     'UserForm1.lblTradingLog12 = logsArray(11)
 End Sub
 
+' sub to add a log in the global logs array
 Sub addLog(log As String)
     len_arr = UBound(logsArray) - LBound(logsArray)
     For i = len_arr - 1 To 1 Step -1
@@ -321,6 +313,7 @@ Sub addLog(log As String)
     displayLogs
 End Sub
 
+' sub fro debugging logs array
 Sub DEBUGdisplayLogsArray()
 len_arr = UBound(logsArray) - LBound(logsArray)
 Debug.Print ("------------------------------")
@@ -329,17 +322,15 @@ Debug.Print ("------------------------------")
     Next
 End Sub
 
+' sub to run the Random trading bot
 Sub runRandomBot()
     Dim ticker As String
     Dim qt As String
     Dim signal As String
     Dim frequence As String
-
-    
     ticker = UserForm1.inputTradingTicker
     qt = UserForm1.inputTradingQuantity
     frequence = UserForm1.inputTradingFrequence
-    
     Do Until Not isRandomBotOn
         Dim rand As Integer
         rand = Int(3 * Rnd) + 1
@@ -360,13 +351,14 @@ Sub runRandomBot()
         Else
             addLog (get_time_for_logs & " : Do nothing " & ChrW(9787))
         End If
+        ' *NOT MANDATORY* : updating the all the balances
         Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
-
         Application.Wait (Now + TimeValue("00:00:" & frequence))
         DoEvents
     Loop
 End Sub
 
+' sub to run the Mean reversion trading bot
 Sub runMRBot()
     Dim ticker As String
     Dim qt As String
@@ -381,81 +373,66 @@ Sub runMRBot()
     Dim upLimit As Double
     Dim downLimit As Double
     Dim margin As Double
-    
     ticker = UserForm1.inputTradingTicker
     qt = UserForm1.inputTradingQuantity
     frequence = UserForm1.inputTradingFrequence
     margin = CDbl(Replace(UserForm1.inputTradingMargin, ".", ","))
-
-'On Error GoTo noticker
-
-
-
-url = "https://api.binance.com/api/v3/klines?symbol=" & ticker & "&interval=1m&limit=5"
-xmlhttp.Open "GET", url, False
-xmlhttp.Send
-Set json = JsonConverter.ParseJson(xmlhttp.responseText)
-
-'[
-'  [
-'    1499040000000,      // Kline open time (1)
-'    "0.01634790",       // Open price (2)
-'    "0.80000000",       // High price (3)
-'    "0.01575800",       // Low price (4)
-'    "0.01577100",       // Close price (5)
-'    "148976.11427815",  // Volume (6)
-'    1499644799999,      // Kline Close time (7)
-'    "2434.19055334",    // Quote asset volume (8)
-'    308,                // Number of trades (9)
-'    "1756.87402397",    // Taker buy base asset volume (10)
-'    "28.46694368",      // Taker buy quote asset volume (11)
-'    "0"                 // Unused field, ignore. (12)
-'  ],
-'  ...
-'  [...]
-']
-
-
-Dim i As Integer
-
-
-For i = 1 To 5
-    closeArray(i) = CDbl(Replace(json(i)(5), ".", ","))
-Next
-
-average = Application.WorksheetFunction.sum(closeArray) / 5
-current_price = ModData.getCurrentPrice(ticker)
-upLimit = average + (average * (1 + margin))
-downLimit = average + (average * (1 - margin))
-
-
-    Do Until Not isMRBotOn
-
-        If current_price < downLimit Then
-            signal = placeMarketOrder(UserForm1.inputBalances1, UserForm1.inputBalances2, "BUY", ticker, qt)
-            If signal = "success" Then
-                addLog (get_time_for_logs & " : " & ChrW(9650) & " BUY " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker) & " (down limit is " & downLimit & " )")
+    url = "https://api.binance.com/api/v3/klines?symbol=" & ticker & "&interval=1m&limit=5"
+    xmlhttp.Open "GET", url, False
+    xmlhttp.Send
+    Set json = JsonConverter.ParseJson(xmlhttp.responseText)
+    '[
+    '  [
+    '    1499040000000,      // Kline open time (1)
+    '    "0.01634790",       // Open price (2)
+    '    "0.80000000",       // High price (3)
+    '    "0.01575800",       // Low price (4)
+    '    "0.01577100",       // Close price (5)
+    '    "148976.11427815",  // Volume (6)
+    '    1499644799999,      // Kline Close time (7)
+    '    "2434.19055334",    // Quote asset volume (8)
+    '    308,                // Number of trades (9)
+    '    "1756.87402397",    // Taker buy base asset volume (10)
+    '    "28.46694368",      // Taker buy quote asset volume (11)
+    '    "0"                 // Unused field, ignore. (12)
+    '  ],
+    '  ...
+    '  [...]
+    ']
+    Dim i As Integer
+    For i = 1 To 5
+        closeArray(i) = CDbl(Replace(json(i)(5), ".", ","))
+    Next
+    average = Application.WorksheetFunction.sum(closeArray) / 5
+    current_price = ModData.getCurrentPrice(ticker)
+    upLimit = average + (average * (1 + margin))
+    downLimit = average + (average * (1 - margin))
+        Do Until Not isMRBotOn
+            If current_price < downLimit Then
+                signal = placeMarketOrder(UserForm1.inputBalances1, UserForm1.inputBalances2, "BUY", ticker, qt)
+                If signal = "success" Then
+                    addLog (get_time_for_logs & " : " & ChrW(9650) & " BUY " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker) & " (down limit is " & downLimit & " )")
+                Else
+                    addLog (signal)
+                End If
+            ElseIf current_price > upLimit Then
+                signal = placeMarketOrder(UserForm1.inputBalances1, UserForm1.inputBalances2, "SELL", ticker, qt)
+                If signal = "success" Then
+                    addLog (get_time_for_logs & " : " & ChrW(9660) & " SELL " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker) & " (upper limit is " & upLimit & " )")
+                Else
+                    addLog (signal)
+                End If
             Else
-                addLog (signal)
+                addLog (get_time_for_logs & " : Do nothing " & ChrW(9787))
             End If
-        ElseIf current_price > upLimit Then
-            signal = placeMarketOrder(UserForm1.inputBalances1, UserForm1.inputBalances2, "SELL", ticker, qt)
-            If signal = "success" Then
-                addLog (get_time_for_logs & " : " & ChrW(9660) & " SELL " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker) & " (upper limit is " & upLimit & " )")
-            Else
-                addLog (signal)
-            End If
-        Else
-            addLog (get_time_for_logs & " : Do nothing " & ChrW(9787))
-        End If
-        Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
-
-        Application.Wait (Now + TimeValue("00:00:" & frequence))
-        DoEvents
-    Loop
+            ' *NOT MANDATORY* : updating the all the balances
+            Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
+            Application.Wait (Now + TimeValue("00:00:" & frequence))
+            DoEvents
+        Loop
 End Sub
 
-
+' sub to run the Momentum trading bot
 Sub runMomentumBot()
     Dim ticker As String
     Dim qt As String
@@ -470,56 +447,48 @@ Sub runMomentumBot()
     Dim upLimit As Double
     Dim downLimit As Double
     Dim margin As Double
-    
     ticker = UserForm1.inputTradingTicker
     qt = UserForm1.inputTradingQuantity
     frequence = UserForm1.inputTradingFrequence
     margin = CDbl(Replace(UserForm1.inputTradingMargin, ".", ","))
-
-'On Error GoTo noticker
-url = "https://api.binance.com/api/v3/klines?symbol=" & ticker & "&interval=1m&limit=5"
-xmlhttp.Open "GET", url, False
-xmlhttp.Send
-Set json = JsonConverter.ParseJson(xmlhttp.responseText)
-Dim i As Integer
-
-
-For i = 1 To 5
-    closeArray(i) = CDbl(Replace(json(i)(5), ".", ","))
-Next
-
-average = Application.WorksheetFunction.sum(closeArray) / 5
-current_price = ModData.getCurrentPrice(ticker)
-upLimit = average + (average * (1 + margin))
-downLimit = average + (average * (1 - margin))
-
-
-    Do Until Not isMomentumBotOn
-
-        If current_price > upLimit Then
-            signal = placeMarketOrder(UserForm1.inputBalances1, UserForm1.inputBalances2, "BUY", ticker, qt)
-            If signal = "success" Then
-                addLog (get_time_for_logs & " : " & ChrW(9650) & " BUY " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker) & " (upper limit is " & upLimit & " )")
+    url = "https://api.binance.com/api/v3/klines?symbol=" & ticker & "&interval=1m&limit=5"
+    xmlhttp.Open "GET", url, False
+    xmlhttp.Send
+    Set json = JsonConverter.ParseJson(xmlhttp.responseText)
+    Dim i As Integer
+    For i = 1 To 5
+        closeArray(i) = CDbl(Replace(json(i)(5), ".", ","))
+    Next
+    average = Application.WorksheetFunction.sum(closeArray) / 5
+    current_price = ModData.getCurrentPrice(ticker)
+    upLimit = average + (average * (1 + margin))
+    downLimit = average + (average * (1 - margin))
+        Do Until Not isMomentumBotOn
+            If current_price > upLimit Then
+                signal = placeMarketOrder(UserForm1.inputBalances1, UserForm1.inputBalances2, "BUY", ticker, qt)
+                If signal = "success" Then
+                    addLog (get_time_for_logs & " : " & ChrW(9650) & " BUY " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker) & " (upper limit is " & upLimit & " )")
+                Else
+                    addLog (signal)
+                End If
+            ElseIf current_price < downLimit Then
+                signal = placeMarketOrder(UserForm1.inputBalances1, UserForm1.inputBalances2, "SELL", ticker, qt)
+                If signal = "success" Then
+                    addLog (get_time_for_logs & " : " & ChrW(9660) & " SELL " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker) & " (down limit is " & downLimit & " )")
+                Else
+                    addLog (signal)
+                End If
             Else
-                addLog (signal)
+                addLog (get_time_for_logs & " : Do nothing " & ChrW(9787))
             End If
-        ElseIf current_price < downLimit Then
-            signal = placeMarketOrder(UserForm1.inputBalances1, UserForm1.inputBalances2, "SELL", ticker, qt)
-            If signal = "success" Then
-                addLog (get_time_for_logs & " : " & ChrW(9660) & " SELL " & qt & " " & ticker & " @ " & ModData.getCurrentPrice(ticker) & " (down limit is " & downLimit & " )")
-            Else
-                addLog (signal)
-            End If
-        Else
-            addLog (get_time_for_logs & " : Do nothing " & ChrW(9787))
-        End If
-        Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
-
-        Application.Wait (Now + TimeValue("00:00:" & frequence))
-        DoEvents
-    Loop
+            ' *NOT MANDATORY* : updating the all the balances
+            Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
+            Application.Wait (Now + TimeValue("00:00:" & frequence))
+            DoEvents
+        Loop
 End Sub
 
+' sub to power ON the random trading bot (updates the boolean and the label values)
 Sub powerOnRandomTradingBot()
     isRandomBotOn = True
     UserForm1.lblTradingBotStatus.BorderColor = &HFF00&
@@ -528,6 +497,7 @@ Sub powerOnRandomTradingBot()
 
 End Sub
 
+' sub to power OFF the random trading bot (updates the boolean and the label values)
 Sub powerOffRandomTradingBot()
     isRandomBotOn = False
     UserForm1.lblTradingBotStatus.BorderColor = &HFF&
@@ -535,14 +505,15 @@ Sub powerOffRandomTradingBot()
     UserForm1.lblTradingBotStatus.ForeColor = &HFF&
 End Sub
 
+' sub to power ON the mean reversion trading bot (updates the boolean and the label values)
 Sub powerOnMRTradingBot()
     isMRBotOn = True
     UserForm1.lblTradingBotStatus.BorderColor = &HFF00&
     UserForm1.lblTradingBotStatus.Caption = "ON"
     UserForm1.lblTradingBotStatus.ForeColor = &HFF00&
-
 End Sub
 
+' sub to power OFF the mean reversion trading bot (updates the boolean and the label values)
 Sub powerOffMRTradingBot()
     isMRBotOn = False
     UserForm1.lblTradingBotStatus.BorderColor = &HFF&
@@ -550,14 +521,15 @@ Sub powerOffMRTradingBot()
     UserForm1.lblTradingBotStatus.ForeColor = &HFF&
 End Sub
 
+' sub to power ON the momentum trading bot (updates the boolean and the label values)
 Sub powerOnMomentumTradingBot()
     isMomentumBotOn = True
     UserForm1.lblTradingBotStatus.BorderColor = &HFF00&
     UserForm1.lblTradingBotStatus.Caption = "ON"
     UserForm1.lblTradingBotStatus.ForeColor = &HFF00&
-
 End Sub
 
+' sub to power OFF the momentum trading bot (updates the boolean and the label values)
 Sub powerOffMomentumTradingBot()
     isMomentumBotOn = False
     UserForm1.lblTradingBotStatus.BorderColor = &HFF&
@@ -565,12 +537,14 @@ Sub powerOffMomentumTradingBot()
     UserForm1.lblTradingBotStatus.ForeColor = &HFF&
 End Sub
 
+' sub to get the current time for the logs
 Function get_time_for_logs()
     Dim date_now As String
     date_now = Format(Now(), "hh:mm:ss")
     get_time_for_logs = date_now
 End Function
 
+' sub to get ONLY open orders (actually Binance returns ALL orders, IDK why) (requires api keys)
 Sub getOpenOrders(APIkey As String, secret_key As String)
     Dim xmlhttp As Object
     Dim timestamp As Double
@@ -578,19 +552,13 @@ Sub getOpenOrders(APIkey As String, secret_key As String)
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
     Dim ordersString As String
-
     On Error GoTo error
-    
-    
     timestamp = ModBinanceRequests.getTimeStampForBinance
     signature = ModBinanceRequests.getSignature("recvWindow=59999&timestamp=" & timestamp, secret_key)
-    
     url = "https://testnet.binance.vision/api/v3/openOrders?recvWindow=59999&timestamp=" & timestamp & "&signature=" & signature
     xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
-    
-    
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
 '    [
 '        {
@@ -635,10 +603,9 @@ error:
         MsgBox "An error occured : " & xmlhttp.responseText
 End Sub
 
-
+' sub to get ALL orders (requires api keys)
 Sub getAllOrders(APIkey As String, secret_key As String)
     On Error GoTo error
-
     Dim xmlhttp As Object
     Dim timestamp As Double
     Dim signature As String
@@ -651,7 +618,6 @@ Sub getAllOrders(APIkey As String, secret_key As String)
     xmlhttp.Open "GET", url, False
     xmlhttp.setRequestHeader "X-MBX-APIKEY", APIkey
     xmlhttp.Send
-    
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
         For Each item In json
             ordersString = ordersString & ChrW(8658) & " "

@@ -13,10 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Private Sub Label1_Click()
-
-End Sub
-
+' sub to check if credentials are OK
 Private Sub btnWelcomeLogin_Click()
     Dim resp As String
     resp = ModWelcome.login(Welcome.inputWelcomeEmail, Welcome.inputWelcomePassword)
@@ -25,22 +22,19 @@ Private Sub btnWelcomeLogin_Click()
     End If
 End Sub
 
+' sub to sign up user (requires e-mail, names and passwords)
 Private Sub btnWelcomeSignUp_Click()
     Call ModWelcome.signup(Welcome.inputSignupEmail, Welcome.inputSignupFname, Welcome.inputSignupLname, Welcome.inputSignupPassword, Welcome.inputSignupConfirm)
 End Sub
 
-
-
+' sub to display the Login frame
 Private Sub lblWelcomeLogin_Click()
     Welcome.frmWelcomeLogin.Visible = True
     Welcome.frmWelcomeSignup.Visible = False
 End Sub
 
+' sub to display the Signup frame
 Private Sub lblWelcomeSignUp_Click()
     Welcome.frmWelcomeLogin.Visible = False
     Welcome.frmWelcomeSignup.Visible = True
-End Sub
-
-Private Sub UserForm_Click()
-
 End Sub

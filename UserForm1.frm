@@ -19,14 +19,12 @@ Public isSLToggled As Boolean
 Public isRandomToggled As Boolean
 Public isMRToggled As Boolean
 Public isMomentumToggled As Boolean
-
+' sub to update balances (requires API key and Secret Key)
 Private Sub btnBalancesGetBalances_Click()
-
-Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
-
-
+    Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
+' sub to start streaming BNB
 Private Sub btnBalancesStartBNB_Click()
     Call ModBalances.powerOnBNBStream
     Do Until Not ModBalances.isBNBStreamOn
@@ -36,6 +34,7 @@ Private Sub btnBalancesStartBNB_Click()
     Loop
 End Sub
 
+' sub to start streaming BTC
 Private Sub btnBalancesStartBTC_Click()
     Call ModBalances.powerOnBTCStream
     Do Until Not ModBalances.isBTCStreamOn
@@ -46,6 +45,7 @@ Private Sub btnBalancesStartBTC_Click()
 
 End Sub
 
+' sub to start streaming BUSD
 Private Sub btnBalancesStartBUSD_Click()
     Call ModBalances.powerOnBUSDStream
     Do Until Not ModBalances.isBUSDStreamOn
@@ -56,6 +56,7 @@ Private Sub btnBalancesStartBUSD_Click()
 
 End Sub
 
+' sub to start streaming ETH
 Private Sub btnBalancesStartETH_Click()
     Call ModBalances.powerOnETHStream
     Do Until Not ModBalances.isETHStreamOn
@@ -65,6 +66,7 @@ Private Sub btnBalancesStartETH_Click()
     Loop
 End Sub
 
+' sub to start streaming all cryptos
 Private Sub btnBalancesStartGlobal_Click()
     Call ModBalances.powerOnGlobalStream
     Do Until Not ModBalances.get_isGlobalStream1On
@@ -74,6 +76,7 @@ Private Sub btnBalancesStartGlobal_Click()
     Loop
 End Sub
 
+' sub to start streaming LTC
 Private Sub btnBalancesStartLTC_Click()
     Call ModBalances.powerOnLTCStream
     Do Until Not ModBalances.isLTCStreamOn
@@ -83,6 +86,7 @@ Private Sub btnBalancesStartLTC_Click()
     Loop
 End Sub
 
+' sub to start streaming TRX
 Private Sub btnBalancesStartTRX_Click()
     Call ModBalances.powerOnTRXStream
     Do Until Not ModBalances.isTRXStreamOn
@@ -92,6 +96,7 @@ Private Sub btnBalancesStartTRX_Click()
     Loop
 End Sub
 
+' sub to start streaming USDT
 Private Sub btnBalancesStartUSDT_Click()
     Call ModBalances.powerOnUSDTStream
     Do Until Not ModBalances.isUSDTStreamOn
@@ -101,6 +106,7 @@ Private Sub btnBalancesStartUSDT_Click()
     Loop
 End Sub
 
+' sub to start streaming XRP
 Private Sub btnBalancesStartXRP_Click()
     Call ModBalances.powerOnXRPStream
     Do Until Not ModBalances.isXRPStreamOn
@@ -110,108 +116,112 @@ Private Sub btnBalancesStartXRP_Click()
     Loop
 End Sub
 
+' sub to stop streaming of BNB
 Private Sub btnBalancesStopBNB_Click()
     Call ModBalances.powerOffBNBStream
 End Sub
 
+' sub to stop streaming of BTC
 Private Sub btnBalancesStopBTC_Click()
     Call ModBalances.powerOffBTCStream
 End Sub
 
+' sub to stop streaming of BUSD
 Private Sub btnBalancesStopBUSD_Click()
     Call ModBalances.powerOffBUSDStream
 End Sub
 
+' sub to stop streaming of ETH
 Private Sub btnBalancesStopETH_Click()
     Call ModBalances.powerOffETHStream
 End Sub
 
+' sub to stop streaming of all cryptos
 Private Sub btnBalancesStopGlobal_Click()
     Call ModBalances.powerOffGlobalStream
 End Sub
 
+' sub to stop streaming of LTC
 Private Sub btnBalancesStopLTC_Click()
     Call ModBalances.powerOffLTCStream
 End Sub
 
+' sub to stop streaming of TRX
 Private Sub btnBalancesStopTRX_Click()
     Call ModBalances.powerOffTRXStream
 End Sub
 
+' sub to stop streaming of USDT
 Private Sub btnBalancesStopUSDT_Click()
     Call ModBalances.powerOffUSDTStream
 End Sub
 
+' sub to stop streaming of XRP
 Private Sub btnBalancesStopXRP_Click()
     Call ModBalances.powerOffXRPStream
 End Sub
 
+' sub to update balance of BNB
 Private Sub btnBalancesUpdateBNB_Click()
-Call ModBalances.UpdateBNB(UserForm1.inputBalances1, UserForm1.inputBalances2)
+    Call ModBalances.UpdateBNB(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
+' sub to update balance of BTC
 Private Sub btnBalancesUpdateBTC_Click()
-Call ModBalances.UpdateBTC(UserForm1.inputBalances1, UserForm1.inputBalances2)
+    Call ModBalances.UpdateBTC(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
+' sub to update balance of BUSD
 Private Sub btnBalancesUpdateBUSD_Click()
-Call ModBalances.UpdateBUSD(UserForm1.inputBalances1, UserForm1.inputBalances2)
+    Call ModBalances.UpdateBUSD(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
+' sub to update balance of ETH
 Private Sub btnBalancesUpdateETH_Click()
-Call ModBalances.UpdateETH(UserForm1.inputBalances1, UserForm1.inputBalances2)
+    Call ModBalances.UpdateETH(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
+' sub to update balance of LTC
 Private Sub btnBalancesUpdateLTC_Click()
-Call ModBalances.UpdateLTC(UserForm1.inputBalances1, UserForm1.inputBalances2)
+    Call ModBalances.UpdateLTC(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
+' sub to update balance of TRX
 Private Sub btnBalancesUpdateTRX_Click()
-Call ModBalances.UpdateTRX(UserForm1.inputBalances1, UserForm1.inputBalances2)
+    Call ModBalances.UpdateTRX(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
+' sub to update balance of USDT
 Private Sub btnBalancesUpdateUSDT_Click()
-Call ModBalances.UpdateUSDT(UserForm1.inputBalances1, UserForm1.inputBalances2)
+    Call ModBalances.UpdateUSDT(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
+' sub to update balance of XRP
 Private Sub btnBalancesUpdateXRP_Click()
-Call ModBalances.UpdateXRP(UserForm1.inputBalances1, UserForm1.inputBalances2)
+    Call ModBalances.UpdateXRP(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
+' sub to display Data frame
 Sub btnData_Click()
-
- 'frmData.Visible = False
- frmBalances.Visible = False
- frmTrading.Visible = False
- frmPrediction.Visible = False
- frmAbout.Visible = False
- frmAccount.Visible = False
-
- frmData.Visible = True
-
+    frmBalances.Visible = False
+    frmTrading.Visible = False
+    frmPrediction.Visible = False
+    frmAbout.Visible = False
+    frmAccount.Visible = False
+    frmData.Visible = True
 End Sub
 
+' sub to display Balances frame
 Sub btnBalances_Click()
-
- frmData.Visible = False
- 'frmBalances.Visible = False
- frmTrading.Visible = False
- frmPrediction.Visible = False
- frmAbout.Visible = False
- frmAccount.Visible = False
-
- frmBalances.Visible = True
-
+    frmData.Visible = False
+    frmTrading.Visible = False
+    frmPrediction.Visible = False
+    frmAbout.Visible = False
+    frmAccount.Visible = False
+    frmBalances.Visible = True
 End Sub
 
-Private Sub btnExit_BeforeDragOver(ByVal Cancel As MSForms.ReturnBoolean, ByVal Data As MSForms.DataObject, ByVal X As Single, ByVal Y As Single, ByVal DragState As MSForms.fmDragState, ByVal Effect As MSForms.ReturnEffect, ByVal Shift As Integer)
-
-End Sub
-
-Private Sub btnHome_BeforeDragOver(ByVal Cancel As MSForms.ReturnBoolean, ByVal Data As MSForms.DataObject, ByVal X As Single, ByVal Y As Single, ByVal DragState As MSForms.fmDragState, ByVal Effect As MSForms.ReturnEffect, ByVal Shift As Integer)
-
-End Sub
-
+' sub to start ML bot (requires ticker, quantity, k, nsticks, frequency and discrimination rate)
 Private Sub btnPredictionStart_Click()
     Dim ticker As String
     Dim qt As String
@@ -225,18 +235,19 @@ Private Sub btnPredictionStart_Click()
     nsticks = CInt(UserForm1.inputPredictionNumberSticks)
     freq = CInt(UserForm1.inputPredictionFrequency)
     disc = CDbl(Replace(UserForm1.inputPredictionDiscrimination, ".", ","))
-    
     Call ModBalances.powerOnGlobalStream
     Call modPrediction.startBot(ticker, qt, k, nsticks, freq, disc)
-
-
+    ' call sub of test prediction for explications
+    ' Call modPrediction.testKNN
 End Sub
 
+' sub to stop ML bot
 Private Sub btnPredictionStop_Click()
     Call modPrediction.desactivateMLBot
     Call ModBalances.powerOffGlobalStream
 End Sub
 
+' sub to start candlesticks' chart
 Private Sub btnStartData1_Click()
     Call ModData.activateDataStream1
     Do Until Not ModData.get_isDataStream1On
@@ -246,10 +257,9 @@ Private Sub btnStartData1_Click()
         Application.Wait (Now + TimeValue("00:00:02"))
         DoEvents
     Loop
-
-    
 End Sub
 
+' sub to start line chart
 Private Sub btnStartData2_Click()
     Call ModData.activateDataStream2
     Do Until Not ModData.get_isDataStream2On
@@ -260,108 +270,91 @@ Private Sub btnStartData2_Click()
     Loop
 End Sub
 
-
+' sub to stop candlesticks' chart
 Private Sub btnStopData1_Click()
     Call ModData.desactivateDataStream1
 End Sub
 
+' sub to stop line chart
 Private Sub btnStopData2_Click()
     Call ModData.desactivateDataStream2
-
 End Sub
 
+' sub to display Trading frame
 Sub btnTrading_Click()
-
- frmData.Visible = False
- frmBalances.Visible = False
- 'frmTrading.Visible = False
- frmPrediction.Visible = False
- frmAbout.Visible = False
- frmAccount.Visible = False
-
- frmTrading.Visible = True
-
+    frmData.Visible = False
+    frmBalances.Visible = False
+    frmPrediction.Visible = False
+    frmAbout.Visible = False
+    frmAccount.Visible = False
+    frmTrading.Visible = True
 End Sub
 
+' sub to display Prediction frame
 Sub btnPrediction_Click()
-
- frmData.Visible = False
- frmBalances.Visible = False
- frmTrading.Visible = False
- 'frmPrediction.Visible = False
- frmAbout.Visible = False
- frmAccount.Visible = False
-
- frmPrediction.Visible = True
-
+    frmData.Visible = False
+    frmBalances.Visible = False
+    frmTrading.Visible = False
+    frmAbout.Visible = False
+    frmAccount.Visible = False
+    frmPrediction.Visible = True
 End Sub
 
+' sub to display About frame
 Sub btnAbout_Click()
-
- frmData.Visible = False
- frmBalances.Visible = False
- frmTrading.Visible = False
- frmPrediction.Visible = False
- 'frmAbout.Visible = False
- frmAccount.Visible = False
-
- frmAbout.Visible = True
-
+    frmData.Visible = False
+    frmBalances.Visible = False
+    frmTrading.Visible = False
+    frmPrediction.Visible = False
+    frmAccount.Visible = False
+    frmAbout.Visible = True
 End Sub
 
+' sub to display Account frame
 Sub btnAccount_Click()
-
- frmData.Visible = False
- frmBalances.Visible = False
- frmTrading.Visible = False
- frmPrediction.Visible = False
- 'frmAbout.Visible = False
- frmAbout.Visible = False
- 
- 
- 
- frmAccount.Visible = True
-
- 
-
+    frmData.Visible = False
+    frmBalances.Visible = False
+    frmTrading.Visible = False
+    frmPrediction.Visible = False
+    frmAbout.Visible = False
+    frmAccount.Visible = True
 End Sub
 
+' sub to hide all frames (go to home, displays background)
 Sub btnHome_Click()
-
- frmData.Visible = False
- frmBalances.Visible = False
- frmTrading.Visible = False
- frmPrediction.Visible = False
- frmAbout.Visible = False
- frmAccount.Visible = False
-
+    frmData.Visible = False
+    frmBalances.Visible = False
+    frmTrading.Visible = False
+    frmPrediction.Visible = False
+    frmAbout.Visible = False
+    frmAccount.Visible = False
 End Sub
 
+' sub to exit app
 Sub btnExit_Click()
-
-MsgBox "Click on 'Delete' for all the next prompts"
-
-Call ModDeleteAllCharts.deleteAll
-
-Unload Me
-
+    MsgBox "Click on 'Delete' for all the next prompts"
+    Call ModDeleteAllCharts.deleteAll
+    Unload Me
 End Sub
 
-
+' sub to display all orders (requires API key and Secret key)
 Private Sub btnTradingDisplayAllOrders_Click()
     Call ModTrading.getAllOrders(UserForm1.inputBalances1, UserForm1.inputBalances2)
     frmAllOrders.Show
 End Sub
 
+' sub to display open orders (requires API key and Secret key)
 Private Sub btnTradingDisplayOrders_Click()
     Call ModTrading.getOpenOrders(UserForm1.inputBalances1, UserForm1.inputBalances2)
     frmOpenOrders.Show
 End Sub
 
+' sub to place an order (requires API key and Secret key)
 Private Sub btnTradingPlaceOrder_Click()
     Call ModTrading.placeOrder(UserForm1.inputBalances1, UserForm1.inputBalances2)
 End Sub
 
+' sub to start one the 3 trading bots
 Private Sub btnTradingStartBot_Click()
     Call ModBalances.powerOnGlobalStream
     If UserForm1.tglTradingRandomBot.Value = True Then
@@ -374,9 +367,9 @@ Private Sub btnTradingStartBot_Click()
         Call ModTrading.powerOnMomentumTradingBot
         Call ModTrading.runMomentumBot
     End If
-    
 End Sub
 
+' sub to stop the currently running trading bot (stops all bots)
 Private Sub btnTradingStopBot_Click()
     Call ModTrading.powerOffRandomTradingBot
     Call ModTrading.powerOffMRTradingBot
@@ -384,60 +377,27 @@ Private Sub btnTradingStopBot_Click()
     Call ModBalances.powerOffGlobalStream
 End Sub
 
-Private Sub CommandButton1_Click()
-    Call modPrediction.predict(10, 2)
-End Sub
-
-Private Sub frmAbout_Click()
-
-End Sub
-
-Private Sub Label19_Click()
-
-End Sub
-
-Private Sub Label20_Click()
-
-End Sub
-
-Private Sub Label60_Click()
-
-End Sub
-
-Private Sub Label61_Click()
-
-End Sub
-
-Private Sub Label92_Click()
-
-End Sub
-
-Private Sub Label93_Click()
-
-End Sub
-
+' sub to send an e-mail
 Private Sub lblAboutContact_Click()
-ActiveWorkbook.FollowHyperlink Address:="mailto:excelliarmus@proton.me", NewWindow:=True
+    ActiveWorkbook.FollowHyperlink Address:="mailto:excelliarmus@proton.me", NewWindow:=True
 End Sub
 
-
+' sub to redirect to the docs
 Private Sub lblAboutDocs_Click()
-ActiveWorkbook.FollowHyperlink Address:="https://excelliarmus.gitbook.io/docs/", NewWindow:=True
+    ActiveWorkbook.FollowHyperlink Address:="https://excelliarmus.gitbook.io/docs/", NewWindow:=True
 End Sub
 
+' sub to redirect to the github repo
 Private Sub lblAboutGithub_Click()
-ActiveWorkbook.FollowHyperlink Address:="https://github.com/excelliarmus/app", NewWindow:=True
+    ActiveWorkbook.FollowHyperlink Address:="https://github.com/excelliarmus/app", NewWindow:=True
 End Sub
 
-
+' sub to redirect to the YouTube channel
 Private Sub lblAboutYoutube_Click()
-ActiveWorkbook.FollowHyperlink Address:="https://www.youtube.com/@Excelliarmus", NewWindow:=True
+    ActiveWorkbook.FollowHyperlink Address:="https://www.youtube.com/@Excelliarmus", NewWindow:=True
 End Sub
 
-Private Sub lblAboutEmail_Click()
-
-End Sub
-
+' sub to display Limit order selected
 Private Sub tglTradingLimit_Click()
     If isLimitToggled Then
         isLimitToggled = False
@@ -450,6 +410,7 @@ Private Sub tglTradingLimit_Click()
     End If
 End Sub
 
+' sub to display Market order selected
 Private Sub tglTradingMarket_Click()
     If isMarketToggled Then
         isMarketToggled = False
@@ -460,10 +421,9 @@ Private Sub tglTradingMarket_Click()
         UserForm1.tglTradingMarket.BackStyle = fmBackStyleOpaque
         UserForm1.tglTradingMarket.ForeColor = &H0&
     End If
-    
-    
 End Sub
 
+' sub to display Momentum trading bot selected
 Private Sub tglTradingMomentumBot_Click()
     If isMomentumToggled Then
         isMomentumToggled = False
@@ -476,6 +436,7 @@ Private Sub tglTradingMomentumBot_Click()
     End If
 End Sub
 
+' sub to display Mean-reversion trading bot selected
 Private Sub tglTradingMRBot_Click()
     If isMRToggled Then
         isMRToggled = False
@@ -488,6 +449,7 @@ Private Sub tglTradingMRBot_Click()
     End If
 End Sub
 
+' sub to display Random trading bot selected
 Private Sub tglTradingRandomBot_Click()
     If isRandomToggled Then
         isRandomToggled = False
@@ -500,6 +462,7 @@ Private Sub tglTradingRandomBot_Click()
     End If
 End Sub
 
+' sub to display Stop Loss order selected
 Private Sub tglTradingSL_Click()
     If isSLToggled Then
         isSLToggled = False
@@ -512,9 +475,8 @@ Private Sub tglTradingSL_Click()
     End If
 End Sub
 
+' sub to make to userform resizable and to display charts 1 and 2
 Sub UserForm_Activate()
-
-Call ModMakeUserFormResizable.MakeFormResizable
-Call ModData.initializeData(UserForm1.inputData1, UserForm1.inputData2)
-
+    Call ModMakeUserFormResizable.MakeFormResizable
+    Call ModData.initializeData(UserForm1.inputData1, UserForm1.inputData2)
 End Sub

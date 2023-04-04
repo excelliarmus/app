@@ -1,64 +1,58 @@
 Attribute VB_Name = "ModBinanceRequests"
+' function takes a string to hash, a secret key to hash with and returns a signature for Binance HTTP requests
 Function getSignature(toHash As String, secretKey As String)
-
-getSignature = Hex_HMACSHA256(toHash, secretKey)
-
+    getSignature = Hex_HMACSHA256(toHash, secretKey)
 End Function
 
-
+' function takes a string to hash, a secret key to hash with HMAC SHA256 algorithm, and returns an hexadecimal string
+' inspired from internet
 Public Function Hex_HMACSHA256(ByVal sTextToHash As String, ByVal sSharedSecretKey As String)
-
     Dim asc As Object, enc As Object
     Dim TextToHash() As Byte
     Dim SharedSecretKey() As Byte
     Set asc = CreateObject("System.Text.UTF8Encoding")
     Set enc = CreateObject("System.Security.Cryptography.HMACSHA256")
-
     TextToHash = asc.Getbytes_4(sTextToHash)
     SharedSecretKey = asc.Getbytes_4(sSharedSecretKey)
     enc.key = SharedSecretKey
-
     Dim bytes() As Byte
     bytes = enc.ComputeHash_2((TextToHash))
+    ' tried to encode bytes directly to HEX but not working so have to do bytes > b64 > b16
     Hex_HMACSHA256 = LCase(Base64To16(EncodeBase64(bytes)))
     Set asc = Nothing
     Set enc = Nothing
-
 End Function
 
+' function takes an array of bytes and returns b64 encoded string
+' inspired from internet
 Private Function EncodeBase64(ByRef arrData() As Byte) As String
-
     'Inside the VBE, Go to Tools -> References, then Select Microsoft XML, v6.0
     '(or whatever your latest is. This will give you access to the XML Object Library.)
-
     Dim objXML As MSXML2.DOMDocument60
     Dim objNode As MSXML2.IXMLDOMElement
-
     Set objXML = New MSXML2.DOMDocument60
-
     ' byte array to base64
     Set objNode = objXML.createElement("b64")
     objNode.DataType = "bin.base64"
     objNode.nodeTypedValue = arrData
     EncodeBase64 = objNode.Text
-
     Set objNode = Nothing
     Set objXML = Nothing
 End Function
 
+' function to directly encode bytes into HEX
+' I think it works alone but not with the HEX HMAC SHA 256 function
+' inspired from internet
 Private Function ByteArrayToHex(ByRef ByteArray() As Byte) As String
     Dim l As Long, strRet As String
-    
     For l = LBound(ByteArray) To UBound(ByteArray)
         strRet = strRet & Hex$(ByteArray(l)) & ""
     Next l
-
     ByteArrayToHex = LCase(strRet)
 End Function
 
+' function returns the current unix timestamp of the binance server
 Function getTimeStampForBinance()
-
-
 '    Tout ça n'a servi à rien, je ne savais pas
 '    qu 'on pouvait directement avoir le server time
 '    de binance
@@ -74,9 +68,6 @@ Function getTimeStampForBinance()
 '    ' VBA's ts is 3594104 ahead
 '    timestamp_real = timestamp_vba - 3594104
 '    timestamp_binance = timestamp_real - 70000 '50000 sur les PC de la FAC
-'
-    
-    
     Dim xmlhttp As Object
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
@@ -84,11 +75,11 @@ Function getTimeStampForBinance()
     xmlhttp.Open "GET", url, False
     xmlhttp.Send
     Set json = JsonConverter.ParseJson(xmlhttp.responseText)
-    
     getTimeStampForBinance = json("serverTime")
-
 End Function
 
+' function takes b64 string and returns b16 string
+' inspired from internet
 Function Base64To16(Base64 As String) As String
   Dim Base2 As String
   Dim i As Long

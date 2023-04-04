@@ -1,18 +1,23 @@
 Attribute VB_Name = "modPrediction"
 Option Explicit
 
-Public isMLBotOn As Boolean
-Public predictionLogsArray(12) As String
+Public isMLBotOn As Boolean 'Boolean to check if ML bot is ON
+Public predictionLogsArray(12) As String 'Array of ML bot's logs
 
-Sub test()
+' sub to test the KNN algo
+Sub testKNN()
     Dim knn As clsKNN
     Set knn = Factory.CreateKNN(k:=2)
     Dim arr1() As Variant
     Dim arr2() As Variant
+    Dim arr3() As Variant
+    Dim arr4() As Variant
+    Dim arr5() As Variant
     Dim arr_pred() As Variant
     Dim arr_y() As Variant
     Dim arrMaster() As Variant
-    'training
+    
+    'training data
     arr1 = Array(1, 1, 1, 1, 1)
     arr2 = Array(1, 1, 1, 1, 1)
     arr3 = Array(2, 2, 2, 2, 2)
@@ -24,251 +29,10 @@ Sub test()
     
     'predicting
     arr_pred = Array(3, 3, 3, 3, 3)
-    Debug.Print (VarType(arr_pred))
     MsgBox (knn.predict(arr_pred))
 End Sub
 
-Sub predict(window As Integer, k As Integer)
-Dim xmlhttp As Object
-Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
-Dim json As Object
-Dim OHLCopen As Double
-Dim OHLChigh As Double
-Dim OHLClow As Double
-Dim OHLCclose As Double
-Dim X() As Variant
-ReDim Preserve X(0 To window - 2)
-Dim Y() As Integer
-ReDim Preserve Y(0 To window - 2)
-
-'On Error GoTo noticker
-
-
-
-url = "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=" & window
-xmlhttp.Open "GET", url, False
-xmlhttp.Send
-
-Set json = JsonConverter.ParseJson(xmlhttp.responseText)
-
-'[
-'  [
-'    1499040000000,      // Kline open time (1)
-'    "0.01634790",       // Open price (2)
-'    "0.80000000",       // High price (3)
-'    "0.01575800",       // Low price (4)
-'    "0.01577100",       // Close price (5)
-'    "148976.11427815",  // Volume (6)
-'    1499644799999,      // Kline Close time (7)
-'    "2434.19055334",    // Quote asset volume (8)
-'    308,                // Number of trades (9)
-'    "1756.87402397",    // Taker buy base asset volume (10)
-'    "28.46694368",      // Taker buy quote asset volume (11)
-'    "0"                 // Unused field, ignore. (12)
-'  ],
-'  ...
-'  [...]
-']
-
-
-
-Dim i As Integer
-For i = 0 To window - 2
-    OHLCopen = CDbl(Replace(json(i + 1)(2), ".", ","))
-    OHLChigh = CDbl(Replace(json(i + 1)(3), ".", ","))
-    OHLClow = CDbl(Replace(json(i + 1)(4), ".", ","))
-    OHLCclose = CDbl(Replace(json(i + 1)(5), ".", ","))
-    OHLCclose_next = CDbl(Replace(json(i + 2)(5), ".", ","))
-    
-    X(i) = Array(OHLCopen, OHLChigh, OHLClow, OHLCclose)
-    
-    If OHLCclose > OHLCclose_next Then
-        Y(i) = -1
-    ElseIf OHLCclose < OHLCclose_next Then
-        Y(i) = 1
-    End If
-Next
-
-
-
-    Dim OHLCopen_to_predict As Double
-    Dim OHLChigh_to_predict As Double
-    Dim OHLClow_to_predict As Double
-    Dim OHLCclose_to_predict As Double
-    
-    OHLCopen_to_predict = CDbl(Replace(json(window)(2), ".", ","))
-    OHLChigh_to_predict = CDbl(Replace(json(window)(3), ".", ","))
-    OHLClow_to_predict = CDbl(Replace(json(window)(4), ".", ","))
-    OHLCclose_to_predict = CDbl(Replace(json(window)(5), ".", ","))
-    'Dim arr_to_predict As Variant
-    'arr_to_predict = Array(OHLCopen_to_predict, OHLChigh_to_predict, OHLClow_to_predict, OHLCclose_to_predict)
-    
-    Dim knn As clsKNN
-    Set knn = Factory.CreateKNN(k:=k)
-    Call knn.fit(X, Y)
-    
-    'predicting
-    Dim arr_to_predict() As Variant
-    arr_to_predict = Array(OHLCopen_to_predict, OHLChigh_to_predict, OHLClow_to_predict, OHLCclose_to_predict)
-    MsgBox (knn.predict(arr_to_predict))
-
-    
-    'Dim knn As clsKNN
-    'Set knn = Factory.CreateKNN(k:=2)
-    'Call knn.fit(X, y)
-    'MsgBox (knn.predict(arr_to_predict))
-
-'OHLCopen = CDbl(Replace(json(50)(2), ".", ","))
-'OHLChigh = CDbl(Replace(json(50)(3), ".", ","))
-'OHLClow = CDbl(Replace(json(50)(4), ".", ","))
-'OHLCclose = CDbl(Replace(json(50)(5), ".", ","))
-
-'Sheets("Data").Cells(30, 2) = OHLCopen
-'Sheets("Data").Cells(30, 3) = OHLChigh
-'Sheets("Data").Cells(30, 4) = OHLClow
-'Sheets("Data").Cells(30, 5) = OHLCclose
-
-'Debug.Print OHLCopen
-'Debug.Print OHLChigh
-'Debug.Print OHLClow
-'Debug.Print OHLCclose
-
-
-'Done:  Exit Sub
-
-'noticker:
-    'isDataStream1On = False
-    'MsgBox "This trading pair '" & ticker & "' is not supported on Binance."
-
-
-
-End Sub
-
-Sub predict2(window As Integer, k As Integer)
-
-Dim iter As Integer
-For iter = 1 To 5
-
-
-
-Dim xmlhttp As Object
-Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
-Dim json As Object
-Dim OHLCopen As Double
-Dim OHLChigh As Double
-Dim OHLClow As Double
-Dim OHLCclose As Double
-Dim X() As Variant
-ReDim Preserve X(0 To window - 2)
-Dim Y() As Integer
-ReDim Preserve Y(0 To window - 2)
-
-'On Error GoTo noticker
-
-
-
-url = "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=" & window
-xmlhttp.Open "GET", url, False
-xmlhttp.Send
-
-Set json = JsonConverter.ParseJson(xmlhttp.responseText)
-
-'[
-'  [
-'    1499040000000,      // Kline open time (1)
-'    "0.01634790",       // Open price (2)
-'    "0.80000000",       // High price (3)
-'    "0.01575800",       // Low price (4)
-'    "0.01577100",       // Close price (5)
-'    "148976.11427815",  // Volume (6)
-'    1499644799999,      // Kline Close time (7)
-'    "2434.19055334",    // Quote asset volume (8)
-'    308,                // Number of trades (9)
-'    "1756.87402397",    // Taker buy base asset volume (10)
-'    "28.46694368",      // Taker buy quote asset volume (11)
-'    "0"                 // Unused field, ignore. (12)
-'  ],
-'  ...
-'  [...]
-']
-
-
-
-Dim i As Integer
-For i = 0 To window - 2
-    OHLCopen = CDbl(Replace(json(i + 1)(2), ".", ","))
-    OHLChigh = CDbl(Replace(json(i + 1)(3), ".", ","))
-    OHLClow = CDbl(Replace(json(i + 1)(4), ".", ","))
-    OHLCclose = CDbl(Replace(json(i + 1)(5), ".", ","))
-    OHLCclose_next = CDbl(Replace(json(i + 2)(5), ".", ","))
-    
-    X(i) = Array(OHLCopen, OHLChigh, OHLClow, OHLCclose)
-    
-    If OHLCclose > OHLCclose_next Then
-        Y(i) = -1
-    ElseIf OHLCclose < OHLCclose_next Then
-        Y(i) = 1
-    End If
-Next
-
-
-
-    Dim OHLCopen_to_predict As Double
-    Dim OHLChigh_to_predict As Double
-    Dim OHLClow_to_predict As Double
-    Dim OHLCclose_to_predict As Double
-    
-    OHLCopen_to_predict = CDbl(Replace(json(window)(2), ".", ","))
-    OHLChigh_to_predict = CDbl(Replace(json(window)(3), ".", ","))
-    OHLClow_to_predict = CDbl(Replace(json(window)(4), ".", ","))
-    OHLCclose_to_predict = CDbl(Replace(json(window)(5), ".", ","))
-    'Dim arr_to_predict As Variant
-    'arr_to_predict = Array(OHLCopen_to_predict, OHLChigh_to_predict, OHLClow_to_predict, OHLCclose_to_predict)
-    
-    Dim knn As clsKNN
-    Set knn = Factory.CreateKNN(k:=k)
-    Call knn.fit(X, Y)
-    
-    'predicting
-    Dim arr_to_predict() As Variant
-    arr_to_predict = Array(OHLCopen_to_predict, OHLChigh_to_predict, OHLClow_to_predict, OHLCclose_to_predict)
-    MsgBox (knn.predict(arr_to_predict))
-    Dim tmp() As Integer
-    
-
-
-    
-    'Dim knn As clsKNN
-    'Set knn = Factory.CreateKNN(k:=2)
-    'Call knn.fit(X, y)
-    'MsgBox (knn.predict(arr_to_predict))
-
-'OHLCopen = CDbl(Replace(json(50)(2), ".", ","))
-'OHLChigh = CDbl(Replace(json(50)(3), ".", ","))
-'OHLClow = CDbl(Replace(json(50)(4), ".", ","))
-'OHLCclose = CDbl(Replace(json(50)(5), ".", ","))
-
-'Sheets("Data").Cells(30, 2) = OHLCopen
-'Sheets("Data").Cells(30, 3) = OHLChigh
-'Sheets("Data").Cells(30, 4) = OHLClow
-'Sheets("Data").Cells(30, 5) = OHLCclose
-
-'Debug.Print OHLCopen
-'Debug.Print OHLChigh
-'Debug.Print OHLClow
-'Debug.Print OHLCclose
-
-
-'Done:  Exit Sub
-
-'noticker:
-    'isDataStream1On = False
-    'MsgBox "This trading pair '" & ticker & "' is not supported on Binance."
-
-
-Next iter
-End Sub
-
+' sub to power ON the ML bot (updates boolean and label value)
 Sub activateMLBot()
     isMLBotOn = True
     UserForm1.lblPredictionStatus.BorderColor = &HFF00&
@@ -276,6 +40,7 @@ Sub activateMLBot()
     UserForm1.lblPredictionStatus.ForeColor = &HFF00&
 End Sub
 
+' sub to power OFF the ML bot (updates boolean and label value)
 Sub desactivateMLBot()
     isMLBotOn = False
     UserForm1.lblPredictionStatus.BorderColor = &HFF&
@@ -283,6 +48,9 @@ Sub desactivateMLBot()
     UserForm1.lblPredictionStatus.ForeColor = &HFF&
 End Sub
 
+' sub to start the ML trading bot (requires the ticker, the quantity of each trade...
+' ... the k parameter, the number of klines, the frequency fo decision making
+' and the discrimination rate between decions according to returns
 Sub startBot(symbol As String, qt As String, k As Integer, window As Integer, frequency As Integer, discrimination As Double)
     Call activateMLBot
     Dim knn As clsKNN
@@ -374,6 +142,7 @@ Sub startBot(symbol As String, qt As String, k As Integer, window As Integer, fr
     End If
 End Sub
 
+' sub to diplay on userform the KNNs
 Sub displayKNN(arr As Variant)
     Dim str As String
     str = ""
@@ -386,13 +155,12 @@ Sub displayKNN(arr As Variant)
         Else
             str = str & "HOLD "
         End If
-        
     Next a
     UserForm1.lblPredictionTime.Caption = ModTrading.get_time_for_logs
     UserForm1.inputPredictionLabels.Text = str
-    
 End Sub
 
+' sub to diplay the most present label among KNNs
 Sub displayMost(i As Integer)
     If i = 1 Then
         UserForm1.inputPredictionMostCommon = "BUY"
@@ -404,6 +172,7 @@ Sub displayMost(i As Integer)
     
 End Sub
 
+' sub to display logs of the ML trading bot
 Sub displayLogs()
     UserForm1.lblPredictionLog1 = predictionLogsArray(0)
     If predictionLogsArray(0) Like "*BUY*" Then
@@ -535,6 +304,7 @@ Sub displayLogs()
     'UserForm1.lblPredictionLog12 = predictionLogsArray(11)
 End Sub
 
+' sub to add a log to the global logs array
 Sub addLog(log As String)
     Dim len_arr As Integer
     Dim i As Integer

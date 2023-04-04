@@ -1,18 +1,14 @@
 Attribute VB_Name = "ModWelcome"
+' function returns if email and password are ok (connects to supabase and gets basic data)
 Function login(email As String, password As String)
-    
     Dim xmlhttp As Object
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     Dim json As Object
-
-    
-    
     url = "https://aeawfxrqshwuxazdckoi.supabase.co/auth/v1/token?grant_type=password"
     xmlhttp.Open "POST", url, False
     xmlhttp.setRequestHeader "apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlYXdmeHJxc2h3dXhhemRja29pIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY3OTQxMzI3MywiZXhwIjoxOTk0OTg5MjczfQ.wLyIVFYOFkIbaIJVG9r1iH2FCdM8wem3ClDnhuwfOIQ"
     xmlhttp.setRequestHeader "Content-Type", "application/json"
     xmlhttp.Send "{" & Chr(34) & "email" & Chr(34) & ":" & Chr(34) & email & Chr(34) & "," & Chr(34) & "password" & Chr(34) & ":" & Chr(34) & password & Chr(34) & "}"
-    
     If InStr(xmlhttp.responseText, "error") Then
         'MsgBox "error"
         Welcome.lblWelcomeLoginMessage.Caption = "Error" & vbNewLine & "Wrong credentials. Please try again."
@@ -33,13 +29,10 @@ Function login(email As String, password As String)
         UserForm1.Show
         login = "loginok"
     End If
-
-
-
 End Function
 
+' sub to sign up user (requires email, names, passwords)
 Sub signup(email As String, first_name As String, last_name As String, password As String, confirm As String)
-
     If Not (IsValidEmail(email)) Then
         Welcome.lblWelcomeSignupMessage.Caption = "Error" & vbNewLine & "Invalid email."
         Welcome.lblWelcomeSignupMessage.Visible = True
@@ -59,7 +52,6 @@ Sub signup(email As String, first_name As String, last_name As String, password 
         Dim xmlhttp As Object
         Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
         Dim json As Object
-        
         url = "https://aeawfxrqshwuxazdckoi.supabase.co/auth/v1/signup"
         xmlhttp.Open "POST", url, False
         xmlhttp.setRequestHeader "apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlYXdmeHJxc2h3dXhhemRja29pIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY3OTQxMzI3MywiZXhwIjoxOTk0OTg5MjczfQ.wLyIVFYOFkIbaIJVG9r1iH2FCdM8wem3ClDnhuwfOIQ"
@@ -75,14 +67,11 @@ Sub signup(email As String, first_name As String, last_name As String, password 
         Else
             Welcome.lblWelcomeSignupMessage.Caption = "Error" & vbNewLine & "Could not register. Please try again"
             Welcome.lblWelcomeSignupMessage.Visible = True
-        
         End If
-        
-        
     End If
-
 End Sub
 
+' sub to add to supabase database names and uuid from uuid from auth api
 Sub registerToSupabase(id As String, fname As String, lname As String)
     Dim xmlhttp As Object
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
@@ -96,7 +85,8 @@ Sub registerToSupabase(id As String, fname As String, lname As String)
     xmlhttp.Send "{" & Chr(34) & "id" & Chr(34) & ":" & Chr(34) & id & Chr(34) & "," & Chr(34) & "first_name" & Chr(34) & ":" & Chr(34) & fname & Chr(34) & "," & Chr(34) & "last_name" & Chr(34) & ":" & Chr(34) & lname & Chr(34) & "}"
 End Sub
 
-
+' function to check if email field is valid
+' inspired from internet
 Function IsValidEmail(sEmailAddress As String) As Boolean
     'Code from Officetricks
     'Define variables
@@ -128,7 +118,7 @@ Function IsValidEmail(sEmailAddress As String) As Boolean
     IsValidEmail = bReturn
 End Function
 
-
+' sub to diplay in Account section names and creation date of user
 Sub getUserDetails(uid As String)
     Dim xmlhttp As Object
     Set xmlhttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")
