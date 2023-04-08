@@ -97,7 +97,7 @@ Sub startBot(symbol As String, qt As String, k As Integer, window As Integer, fr
                 If OHLCclose_next > OHLCclose + (OHLCclose * margin) Then
                     Y(i) = 1
                 ElseIf OHLCclose_next < OHLCclose - (OHLCclose * margin) Then
-                    Y(i) = 1
+                    Y(i) = -1
                 Else
                     Y(i) = 0
                 End If
