@@ -352,7 +352,7 @@ Sub runRandomBot()
             addLog (get_time_for_logs & " : Do nothing " & ChrW(9787))
         End If
         ' *NOT MANDATORY* : updating the all the balances
-        Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
+        ' Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
         Application.Wait (Now + TimeValue("00:00:" & frequence))
         DoEvents
     Loop
@@ -426,7 +426,7 @@ Sub runMRBot()
                 addLog (get_time_for_logs & " : Do nothing " & ChrW(9787))
             End If
             ' *NOT MANDATORY* : updating the all the balances
-            Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
+            ' Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
             Application.Wait (Now + TimeValue("00:00:" & frequence))
             DoEvents
         Loop
@@ -482,7 +482,7 @@ Sub runMomentumBot()
                 addLog (get_time_for_logs & " : Do nothing " & ChrW(9787))
             End If
             ' *NOT MANDATORY* : updating the all the balances
-            Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
+            ' Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
             Application.Wait (Now + TimeValue("00:00:" & frequence))
             DoEvents
         Loop

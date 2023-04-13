@@ -125,7 +125,6 @@ Sub startBot(symbol As String, qt As String, k As Integer, window As Integer, fr
                 End If
             ElseIf prediction = -1 Then
                 signal = ModTrading.placeMarketOrder(UserForm1.inputBalances1, UserForm1.inputBalances2, "SELL", symbol, qt)
-                MsgBox signal
                 If signal = "success" Then
                     addLog (ModTrading.get_time_for_logs & " : " & ChrW(9660) & " SELL " & qt & " " & symbol & " @ " & ModData.getCurrentPrice(symbol) & " (KNN)")
                 Else
@@ -135,7 +134,7 @@ Sub startBot(symbol As String, qt As String, k As Integer, window As Integer, fr
                 addLog (ModTrading.get_time_for_logs & " : Do nothing " & ChrW(9787))
             End If
             
-            Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
+            ' Call ModBalances.UpdateBalances(UserForm1.inputBalances1, UserForm1.inputBalances2)
             Application.Wait (Now + TimeValue("00:00:" & frequency))
             DoEvents
         Loop
